@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contador em Tempo Real - PCRR</title>
+    <title>Contagem Regressiva Oficial - PCRR</title>
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -14,7 +14,7 @@
             margin: 0;
             background-color: #ffffff;
             background-image: url('brasao_pcrr.png'); 
-            background-size: 400px;
+            background-size: 350px;
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
@@ -24,55 +24,58 @@
 
         .main-container {
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.92);
-            padding: 2.5rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
             border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             border: 2px solid #D4AF37;
-            max-width: 700px;
-            width: 90%;
+            max-width: 600px;
+            width: 85%;
         }
 
         .top-badge {
-            width: 100px;
+            width: 90px;
             margin-bottom: 1rem;
         }
 
         .frase-topo {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1rem;
             color: #333;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* ESTILO DO RELÓGIO */
-        .relogio-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
+        .relogio-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 2rem;
         }
 
-        .unidade {
-            background: #f8f9fa;
-            padding: 15px;
+        .caixa {
+            background: #f4f4f4;
+            padding: 15px 5px;
             border-radius: 10px;
-            min-width: 80px;
             border-bottom: 4px solid #0073CF;
         }
 
         .numero {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 900;
             color: #0073CF;
             display: block;
+            line-height: 1;
         }
 
         .label {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             font-weight: 700;
             color: #666;
+            margin-top: 5px;
+            display: block;
         }
 
         .vermelho-destaque {
@@ -80,17 +83,17 @@
             font-weight: 800;
             text-transform: uppercase;
             font-size: 1.8rem;
+            margin-top: 10px;
             display: block;
-            margin-top: 15px;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 480px) {
             .numero { font-size: 1.8rem; }
-            .unidade { min-width: 60px; padding: 10px; }
-            .relogio-container { gap: 8px; }
+            .caixa { padding: 10px 2px; }
+            .vermelho-destaque { font-size: 1.3rem; }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -99,47 +102,59 @@
         
         <div class="frase-topo">Faltam exatamente:</div>
 
-        <div class="relogio-container">
-            <div class="unidade">
-                <span class="numero" id="dias">00</span>
+        <div class="relogio-grid">
+            <div class="caixa">
+                <span class="numero" id="d">00</span>
                 <span class="label">Dias</span>
             </div>
-            <div class="unidade">
-                <span class="numero" id="horas">00</span>
+            <div class="caixa">
+                <span class="numero" id="h">00</span>
                 <span class="label">Horas</span>
             </div>
-            <div class="unidade">
-                <span class="numero" id="minutos">00</span>
+            <div class="caixa">
+                <span class="numero" id="m">00</span>
                 <span class="label">Min</span>
             </div>
-            <div class="unidade" style="border-bottom-color: #cc0000;">
-                <span class="numero" id="segundos">00</span>
+            <div class="caixa" style="border-bottom-color: #cc0000;">
+                <span class="numero" id="s">00</span>
                 <span class="label">Seg</span>
             </div>
         </div>
 
+        <div class="frase-topo" style="margin:0">para o início do</div>
         <div class="vermelho-destaque">Curso de Formação</div>
     </div>
 
     <script>
-        function atualizarCronometro() {
-            const dataAlvo = new Date('2026-09-08T00:00:00').getTime();
-            
-            // Função que roda a cada segundo
-            const intervalo = setInterval(function() {
-                const agora = new Date().getTime();
-                const distancia = dataAlvo - agora;
+        const targetDate = new Date("September 8, 2026 00:00:00").getTime();
 
-                // Cálculos matemáticos para dias, horas, minutos e segundos
-                const d = Math.floor(distancia / (1000 * 60 * 60 * 24));
-                const h = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((distancia % (1000 * 60)) / 1000);
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
 
-                // Exibe no HTML
-                document.getElementById("dias").innerHTML = d;
-                document.getElementById("horas").innerHTML = h < 10 ? "0" + h : h;
-                document.getElementById("minutos").innerHTML = m < 10 ? "0" + m : m;
-                document.getElementById("segundos").innerHTML = s < 10 ? "0" + s : s;
+            if (diff <= 0) {
+                document.querySelector(".main-container").innerHTML = "<h2>O curso começou!</h2>";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("d").innerText = days;
+            document.getElementById("h").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("m").innerText = mins < 10 ? "0" + mins : mins;
+            document.getElementById("s").innerText = secs < 10 ? "0" + secs : secs;
+        }
+
+        // Executa uma vez agora para não começar no 00
+        updateCountdown();
+        
+        // Atualiza a cada 1 segundo
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
 
                 // Se a contagem terminar
