@@ -22,8 +22,8 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border: 1px solid #D4AF37;
-            width: 90%;
-            max-width: 700px;
+            width: 95%;
+            max-width: 750px;
         }
 
         .top-badge {
@@ -32,57 +32,69 @@
         }
 
         .frase-topo {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.4rem;
+            font-weight: 700;
             margin-bottom: 25px;
             color: #333;
+            text-transform: uppercase;
         }
 
         .relogio-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 30px;
         }
 
         .caixa {
-            background: #f8f9fa;
+            background: #f1f3f5;
             padding: 15px;
             border-radius: 12px;
-            min-width: 80px;
+            min-width: 85px;
             border-bottom: 5px solid #0073CF;
         }
 
         .numero {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 800;
             color: #0073CF;
             display: block;
+            line-height: 1;
         }
 
         .label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             font-weight: 700;
             color: #777;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .para-inicio {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
         .vermelho-destaque {
             color: #cc0000; 
-            font-weight: 800;
-            font-size: 2rem;
+            font-weight: 900;
+            font-size: 2.2rem;
             text-transform: uppercase;
             display: block;
         }
 
         @media (max-width: 600px) {
-            .numero { font-size: 2rem; }
-            .caixa { min-width: 60px; padding: 10px; }
-            .relogio-container { gap: 8px; }
-            .vermelho-destaque { font-size: 1.4rem; }
+            .numero { font-size: 1.8rem; }
+            .caixa { min-width: 65px; padding: 10px; }
+            .relogio-container { gap: 6px; }
+            .vermelho-destaque { font-size: 1.5rem; }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -110,40 +122,36 @@
             </div>
         </div>
 
-        <div class="vermelho-destaque">CURSO DE FORMAÇÃO</div>
+        <div class="para-inicio">Para o início do</div>
+        <div class="vermelho-destaque">Curso de Formação</div>
     </div>
 
     <script>
         function iniciarContagem() {
-            // Data Alvo (8 de Setembro de 2026)
+            // Data alvo: 08 de Setembro de 2026
             const dataFinal = new Date(2026, 8, 8, 0, 0, 0).getTime();
 
-            const timer = setInterval(function() {
+            setInterval(function() {
                 const agora = new Date().getTime();
                 const total = dataFinal - agora;
 
                 if (total <= 0) {
-                    clearInterval(timer);
-                    document.querySelector('.relogio-container').innerHTML = "<h2>O curso começou!</h2>";
+                    document.querySelector('.main-container').innerHTML = "<h1>O curso começou!</h1>";
                     return;
                 }
 
-                // Cálculos
                 const d = Math.floor(total / (1000 * 60 * 60 * 24));
                 const h = Math.floor((total % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((total % (1000 * 60)) / 1000);
 
-                // Inserir no HTML
                 document.getElementById('dias').innerText = d;
                 document.getElementById('horas').innerText = h < 10 ? '0' + h : h;
                 document.getElementById('minutos').innerText = m < 10 ? '0' + m : m;
                 document.getElementById('segundos').innerText = s < 10 ? '0' + s : s;
-
             }, 1000);
         }
 
-        // Começar assim que carregar
         iniciarContagem();
     </script>
 </body>
