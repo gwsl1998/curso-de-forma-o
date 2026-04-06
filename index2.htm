@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador Oficial - PCRR</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffffff; /* Fundo branco conforme solicitado */
+            background-image: url('brasao_pcrr.png'); 
+            background-size: 400px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            /* O efeito abaixo faz o brasão ficar como uma marca d'água suave no fundo branco */
+            background-blend-mode: screen; 
+            color: #1a1a1a;
+        }
+
+        .main-container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9); /* Branco levemente transparente */
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 2px solid #D4AF37; /* Borda dourada do brasão */
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .top-badge {
+            width: 120px;
+            margin-bottom: 1rem;
+        }
+
+        .frase-completa {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .dias-num {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #0073CF; /* Azul do brasão */
+            display: block;
+            margin: 10px 0;
+        }
+
+        /* O DESTAQUE EM VERMELHO SOLICITADO */
+        .vermelho-destaque {
+            color: #cc0000; 
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            .frase-completa { font-size: 1.5rem; }
+            .dias-num { font-size: 3.5rem; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-container">
+        <img src="brasao_pcrr.png" alt="Brasão PCRR" class="top-badge">
+        
+        <div class="frase-completa" id="contador-container">
+            Faltam <span class="dias-num" id="valor-dias">--</span> Dias para o início do <br>
+            <span class="vermelho-destaque">Curso de Formação</span>
+        </div>
+    </div>
+
+    <script>
+        function calcularTempo() {
+            // Define a data alvo: 08 de Setembro de 2026
+            const dataAlvo = new Date('2026-09-08T00:00:00');
+            
+            // Pega a data e hora exata de "agora" (do sistema do usuário)
+            const agora = new Date();
+            
+            // Zera as horas para o cálculo ser baseado apenas na virada do dia (meia-noite)
+            agora.setHours(0, 0, 0, 0);
+            
+            const diffMs = dataAlvo - agora;
+            const diasParaAlvo = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+            const displayValor = document.getElementById('valor-dias');
+            const displayContainer = document.getElementById('contador-container');
+
+            if (diasParaAlvo > 0) {
+                // Atualização automática diária
+                displayValor.innerText = diasParaAlvo;
+            } else if (diasParaAlvo === 0) {
+                // Mensagem para o dia 08/09/2026
+                displayContainer.innerHTML = "É HOJE!<br>Início do <span class='vermelho-destaque'>Curso de Formação</span>";
+            } else {
+                // Mensagem após a data ter passado
+                displayContainer.innerHTML = "O <span class='vermelho-destaque'>Curso de Formação</span><br>já começou!";
+            }
+        }
+
+        // Roda a função ao abrir a página
+        calcularTempo();
+    </script>
+</body>
+</html>
