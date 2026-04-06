@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contador Oficial - PCRR</title>
+    <title>Contador em Tempo Real - PCRR</title>
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -12,58 +12,82 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #ffffff; /* Fundo branco conforme solicitado */
+            background-color: #ffffff;
             background-image: url('brasao_pcrr.png'); 
             background-size: 400px;
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            /* O efeito abaixo faz o brasão ficar como uma marca d'água suave no fundo branco */
             background-blend-mode: screen; 
             color: #1a1a1a;
         }
 
         .main-container {
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.9); /* Branco levemente transparente */
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 2px solid #D4AF37; /* Borda dourada do brasão */
-            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.92);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            border: 2px solid #D4AF37;
+            max-width: 700px;
             width: 90%;
         }
 
         .top-badge {
-            width: 120px;
+            width: 100px;
             margin-bottom: 1rem;
         }
 
-        .frase-completa {
-            font-size: 2rem;
+        .frase-topo {
+            font-size: 1.5rem;
             font-weight: 600;
-            line-height: 1.5;
+            margin-bottom: 1rem;
             color: #333;
         }
 
-        .dias-num {
-            font-size: 5rem;
-            font-weight: 900;
-            color: #0073CF; /* Azul do brasão */
-            display: block;
-            margin: 10px 0;
+        /* ESTILO DO RELÓGIO */
+        .relogio-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
         }
 
-        /* O DESTAQUE EM VERMELHO SOLICITADO */
+        .unidade {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 80px;
+            border-bottom: 4px solid #0073CF;
+        }
+
+        .numero {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #0073CF;
+            display: block;
+        }
+
+        .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #666;
+        }
+
         .vermelho-destaque {
             color: #cc0000; 
             font-weight: 800;
             text-transform: uppercase;
+            font-size: 1.8rem;
+            display: block;
+            margin-top: 15px;
         }
 
         @media (max-width: 600px) {
-            .frase-completa { font-size: 1.5rem; }
-            .dias-num { font-size: 3.5rem; }
+            .numero { font-size: 1.8rem; }
+            .unidade { min-width: 60px; padding: 10px; }
+            .relogio-container { gap: 8px; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -73,43 +97,49 @@
     <div class="main-container">
         <img src="brasao_pcrr.png" alt="Brasão PCRR" class="top-badge">
         
-        <div class="frase-completa" id="contador-container">
-            Faltam <span class="dias-num" id="valor-dias">--</span> Dias para o início do <br>
-            <span class="vermelho-destaque">Curso de Formação</span>
+        <div class="frase-topo">Faltam exatamente:</div>
+
+        <div class="relogio-container">
+            <div class="unidade">
+                <span class="numero" id="dias">00</span>
+                <span class="label">Dias</span>
+            </div>
+            <div class="unidade">
+                <span class="numero" id="horas">00</span>
+                <span class="label">Horas</span>
+            </div>
+            <div class="unidade">
+                <span class="numero" id="minutos">00</span>
+                <span class="label">Min</span>
+            </div>
+            <div class="unidade" style="border-bottom-color: #cc0000;">
+                <span class="numero" id="segundos">00</span>
+                <span class="label">Seg</span>
+            </div>
         </div>
+
+        <div class="vermelho-destaque">Curso de Formação</div>
     </div>
 
     <script>
-        function calcularTempo() {
-            // Define a data alvo: 08 de Setembro de 2026
-            const dataAlvo = new Date('2026-09-08T00:00:00');
+        function atualizarCronometro() {
+            const dataAlvo = new Date('2026-09-08T00:00:00').getTime();
             
-            // Pega a data e hora exata de "agora" (do sistema do usuário)
-            const agora = new Date();
-            
-            // Zera as horas para o cálculo ser baseado apenas na virada do dia (meia-noite)
-            agora.setHours(0, 0, 0, 0);
-            
-            const diffMs = dataAlvo - agora;
-            const diasParaAlvo = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            // Função que roda a cada segundo
+            const intervalo = setInterval(function() {
+                const agora = new Date().getTime();
+                const distancia = dataAlvo - agora;
 
-            const displayValor = document.getElementById('valor-dias');
-            const displayContainer = document.getElementById('contador-container');
+                // Cálculos matemáticos para dias, horas, minutos e segundos
+                const d = Math.floor(distancia / (1000 * 60 * 60 * 24));
+                const h = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distancia % (1000 * 60)) / 1000);
 
-            if (diasParaAlvo > 0) {
-                // Atualização automática diária
-                displayValor.innerText = diasParaAlvo;
-            } else if (diasParaAlvo === 0) {
-                // Mensagem para o dia 08/09/2026
-                displayContainer.innerHTML = "É HOJE!<br>Início do <span class='vermelho-destaque'>Curso de Formação</span>";
-            } else {
-                // Mensagem após a data ter passado
-                displayContainer.innerHTML = "O <span class='vermelho-destaque'>Curso de Formação</span><br>já começou!";
-            }
-        }
+                // Exibe no HTML
+                document.getElementById("dias").innerHTML = d;
+                document.getElementById("horas").innerHTML = h < 10 ? "0" + h : h;
+                document.getElementById("minutos").innerHTML = m < 10 ? "0" + m : m;
+                document.getElementById("segundos").innerHTML = s < 10 ? "0" + s : s;
 
-        // Roda a função ao abrir a página
-        calcularTempo();
-    </script>
-</body>
-</html>
+                // Se a contagem terminar
