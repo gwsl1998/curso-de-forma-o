@@ -41,7 +41,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             border-top: 8px solid var(--accent-gold);
             width: 90%;
-            max-width: 750px;
+            max-width: 700px;
             animation: fadeIn 1s ease-out;
         }
 
@@ -67,15 +67,17 @@
             background: #f8f9fa;
             padding: 15px 5px;
             border-radius: 18px;
-            min-width: 100px;
+            min-width: 95px;
             border-bottom: 6px solid var(--primary-blue);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .numero {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 900;
             color: var(--primary-blue);
             line-height: 1;
+            display: block;
         }
 
         .label {
@@ -87,23 +89,23 @@
             display: block;
         }
 
-        /* --- NOVA SEÇÃO DA IMAGEM --- */
+        /* --- CONTAINER DA IMAGEM --- */
         .container-imagem {
             width: 100%;
-            margin-bottom: 15px; /* Espaço entre imagem e barra */
+            margin-bottom: 15px;
             border-radius: 15px;
-            overflow: hidden; /* Garante que a imagem respeite o arredondamento */
+            overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .imagem-destaque {
-            width: 100%;        /* Ocupa toda a largura do container */
-            max-width: 100%;    /* Não deixa a imagem estourar */
-            height: auto;       /* MANTÉM A PROPORÇÃO CORRETA */
-            display: block;     /* Remove espaços extras abaixo da imagem */
+            width: 100%;
+            max-width: 100%;
+            height: auto; /* Mantém a proporção correta */
+            display: block;
         }
-        /* ---------------------------- */
 
+        /* --- BARRA DE PROGRESSO --- */
         .progress-wrapper {
             width: 100%;
             height: 12px;
@@ -124,6 +126,7 @@
             font-weight: 900;
             font-size: 2.2rem;
             text-transform: uppercase;
+            margin-top: 10px;
         }
 
         .controls {
@@ -141,7 +144,11 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s;
         }
+
+        .btn-audio:hover { background: #e2e6e9; }
 
         .btn-share {
             padding: 12px 25px;
@@ -150,24 +157,30 @@
             border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         @media (max-width: 600px) {
             .numero { font-size: 2rem; }
-            .caixa { min-width: 75px; }
+            .caixa { min-width: 70px; }
             .vermelho-destaque { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Elemento de Áudio (Aguardando sua música ser criada) -->
     <audio id="musicaFundo" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
     <div class="main-container">
+        <!-- Brasão oficial -->
         <img src="brasao_pcrr.png" alt="Brasão PCRR" class="top-badge">
         
+        <!-- Relógio -->
         <div class="relogio-container">
             <div class="caixa">
                 <span class="numero" id="dias">00</span>
@@ -187,12 +200,12 @@
             </div>
         </div>
 
-        <!-- IMAGEM ACIMA DA BARRA DE PROGRESSO -->
+        <!-- IMAGEM DO CURSO (Ajustada para o seu arquivo) -->
         <div class="container-imagem">
-            <!-- Substitua 'foto-curso.jpg' pelo nome do seu arquivo de imagem -->
             <img src="foto-curso.jpg" alt="Curso PCRR" class="imagem-destaque">
         </div>
 
+        <!-- Barra de Progresso -->
         <div class="progress-wrapper">
             <div class="progress-bar" id="progressBar"></div>
         </div>
@@ -200,6 +213,7 @@
         <p style="font-weight: 600; color: #636e72;">Para o início do</p>
         <h1 class="vermelho-destaque">Curso de Formação PCRR</h1>
 
+        <!-- Controles -->
         <div class="controls">
             <button id="btnMusica" class="btn-audio">
                 <i class="fas fa-play"></i> Ativar Trilha Sonora
@@ -212,7 +226,7 @@
     </div>
 
     <script>
-        // Lógica da Música
+        // Lógica de Áudio
         const musica = document.getElementById('musicaFundo');
         const btnMusica = document.getElementById('btnMusica');
         
@@ -226,38 +240,47 @@
             }
         });
 
-        // Lógica do Relógio e Barra
-        function atualizarTudo() {
+        // Lógica da Contagem Regressiva e Barra de Progresso
+        function atualizarContagem() {
             const dataFinal = new Date(2026, 8, 8, 0, 0, 0).getTime();
-            const dataInicioRef = new Date(2024, 0, 1).getTime();
+            const dataInicioReferencia = new Date(2024, 0, 1).getTime();
 
-            setInterval(function() {
+            const x = setInterval(function() {
                 const agora = new Date().getTime();
-                const total = dataFinal - agora;
+                const distancia = dataFinal - agora;
 
-                const d = Math.floor(total / (1000 * 60 * 60 * 24));
-                const h = Math.floor((total % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((total % (1000 * 60)) / 1000);
+                if (distancia < 0) {
+                    clearInterval(x);
+                    document.querySelector(".main-container").innerHTML = "<h1>O CURSO COMEÇOU!</h1>";
+                    return;
+                }
 
-                document.getElementById('dias').innerText = d.toString().padStart(2, '0');
-                document.getElementById('horas').innerText = h.toString().padStart(2, '0');
-                document.getElementById('minutos').innerText = m.toString().padStart(2, '0');
-                document.getElementById('segundos').innerText = s.toString().padStart(2, '0');
+                // Cálculos
+                const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
 
-                // Barra de Progresso
-                const totalJornada = dataFinal - dataInicioRef;
-                const decorrido = agora - dataInicioRef;
-                const perc = (decorrido / totalJornada) * 100;
-                document.getElementById('progressBar').style.width = Math.min(Math.max(perc, 0), 100) + "%";
+                // Exibir resultados
+                document.getElementById("dias").innerText = dias.toString().padStart(2, '0');
+                document.getElementById("horas").innerText = horas.toString().padStart(2, '0');
+                document.getElementById("minutos").innerText = minutos.toString().padStart(2, '0');
+                document.getElementById("segundos").innerText = segundos.toString().padStart(2, '0');
 
-                // WhatsApp
-                const link = `https://wa.me/?text=${encodeURIComponent('Faltam ' + d + ' dias para o Curso de Formação PCRR! 💀')}`;
-                document.getElementById('whatsappBtn').href = link;
+                // Atualizar Barra de Progresso
+                const tempoTotal = dataFinal - dataInicioReferencia;
+                const tempoDecorrido = agora - dataInicioReferencia;
+                const porcentagem = (tempoDecorrido / tempoTotal) * 100;
+                document.getElementById("progressBar").style.width = Math.min(Math.max(porcentagem, 0), 100) + "%";
+
+                // Atualizar Link WhatsApp
+                const msg = encodeURIComponent(`Faltam ${dias} dias para o Curso de Formação PCRR! 💀🔥`);
+                document.getElementById("whatsappBtn").href = `https://wa.me/?text=${msg}`;
 
             }, 1000);
         }
-        atualizarTudo();
+
+        atualizarContagem();
     </script>
 </body>
 </html>
