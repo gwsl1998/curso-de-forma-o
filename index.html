@@ -3,33 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal PCRR - Contagem Regressiva</title>
+    <title>Portal PCRR - Contagem Regressiva Oficial</title>
     
-    <!-- Fontes de Alta Qualidade -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary-navy: #002D5B; /* Azul Institucional */
-            --accent-gold: #B8860B;  /* Dourado Heráldico */
-            --danger-red: #C0392B;   /* Vermelho de Alerta */
-            --bg-soft: #F8FAFC;      /* Fundo suave para contraste */
-            --text-dark: #1A202C;
+            --navy: #002D5B; 
+            --gold: #B8860B;  
+            --red: #C0392B;   
+            --light-bg: #F1F5F9;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-soft);
+            background-color: var(--light-bg);
             background-image: radial-gradient(#CBD5E0 0.5px, transparent 0.5px);
             background-size: 30px 30px;
-            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -40,13 +33,13 @@
         .main-container {
             background: #FFFFFF;
             width: 100%;
-            max-width: 750px;
+            max-width: 700px;
             padding: 60px 40px;
             border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            border-top: 12px solid var(--primary-navy);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+            border-top: 12px solid var(--navy);
             text-align: center;
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 0.8s ease-out;
         }
 
         @keyframes fadeIn {
@@ -54,14 +47,8 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Brasão e Título */
-        .header-section {
-            margin-bottom: 40px;
-        }
-
-        .brasao-pcrr {
+        .brasao {
             width: 120px;
-            height: auto;
             margin-bottom: 25px;
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
         }
@@ -72,106 +59,90 @@
             letter-spacing: 6px;
             font-weight: 600;
             color: #718096;
-            margin-bottom: 10px;
+            margin-bottom: 35px;
         }
 
-        /* Grid do Relógio */
         .timer-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 40px;
         }
 
-        .timer-slot {
+        .timer-box {
             background: #FFFFFF;
-            padding: 25px 10px;
+            padding: 25px 5px;
             border-radius: 16px;
             border: 1px solid #E2E8F0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            border-bottom: 5px solid var(--primary-navy);
-            transition: transform 0.3s ease;
+            border-bottom: 5px solid var(--navy);
         }
 
-        .timer-slot:hover {
-            transform: translateY(-5px);
-        }
-
-        .timer-slot.seconds {
-            border-bottom-color: var(--danger-red);
-        }
+        .timer-box.segundos { border-bottom-color: var(--red); }
 
         .number {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 900;
-            color: var(--primary-navy);
+            color: var(--navy);
             line-height: 1;
-            display: block;
         }
 
-        .timer-slot.seconds .number {
-            color: var(--danger-red);
-        }
+        .timer-box.segundos .number { color: var(--red); }
 
         .label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             font-weight: 700;
             color: #A0AEC0;
-            margin-top: 12px;
+            margin-top: 10px;
             display: block;
-            letter-spacing: 1px;
         }
 
-        /* Barra de Progresso */
-        .progress-section {
+        .progress-container {
             margin-bottom: 50px;
-            padding: 0 10px;
+            text-align: left;
         }
 
-        .progress-info {
+        .progress-header {
             display: flex;
             justify-content: space-between;
             font-size: 0.8rem;
             font-weight: 800;
-            color: #4A5568;
+            color: var(--navy);
             margin-bottom: 12px;
             text-transform: uppercase;
         }
 
-        .progress-track {
+        .track {
             width: 100%;
-            height: 14px;
+            height: 16px;
             background: #EDF2F7;
             border-radius: 50px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #E2E8F0;
         }
 
-        .progress-fill {
+        .fill {
             height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--primary-navy) 0%, var(--accent-gold) 100%);
-            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%; 
+            background: linear-gradient(90deg, var(--navy), var(--gold));
+            transition: width 1s linear;
         }
 
-        /* Rodapé e Texto Final */
-        .footer-section {
-            padding-top: 40px;
+        .footer-text {
             border-top: 2px solid #F1F5F9;
+            padding-top: 40px;
         }
 
-        .chamada-final {
+        .frase-final {
             font-size: 2rem;
             font-weight: 900;
-            color: var(--primary-navy);
+            color: var(--navy);
             text-transform: uppercase;
             line-height: 1.2;
             letter-spacing: -0.5px;
         }
 
-        /* Botões de Ação */
-        .btn-container {
+        .btn-group {
             display: flex;
             justify-content: center;
             gap: 20px;
@@ -188,132 +159,83 @@
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.3s;
+            transition: 0.3s;
             text-transform: uppercase;
             border: none;
-            font-family: inherit;
         }
 
-        .btn-audio {
-            background: transparent;
-            color: var(--primary-navy);
-            border: 2px solid var(--primary-navy);
-        }
+        .btn-audio { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+        .btn-audio:hover { background: var(--navy); color: white; }
+        .btn-share { background: #27AE60; color: white; box-shadow: 0 4px 14px rgba(39, 174, 96, 0.3); }
 
-        .btn-audio:hover {
-            background: var(--primary-navy);
-            color: #FFFFFF;
-        }
-
-        .btn-share {
-            background: #27AE60;
-            color: #FFFFFF;
-            box-shadow: 0 4px 14px rgba(39, 174, 96, 0.3);
-        }
-
-        .btn-share:hover {
-            background: #219150;
-            transform: scale(1.03);
-        }
-
-        /* Responsividade Mobile */
         @media (max-width: 600px) {
-            .main-container {
-                padding: 40px 20px;
-            }
-
-            .timer-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-
-            .number {
-                font-size: 2.5rem;
-            }
-
-            .chamada-final {
-                font-size: 1.4rem;
-            }
-
-            .btn-container {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+            .timer-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .number { font-size: 2.5rem; }
+            .frase-final { font-size: 1.4rem; }
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Reprodutor de áudio oculto -->
-    <audio id="bgMusic" loop>
+    <audio id="musica" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
-    <main class="main-container">
-        <!-- Cabeçalho -->
-        <header class="header-section">
-            <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao-pcrr">
+    <div class="main-container">
+        <header>
+            <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao">
             <h2 class="subtitulo">Faltam apenas</h2>
         </header>
 
-        <!-- Relógio -->
         <section class="timer-grid">
-            <div class="timer-slot">
-                <span class="number" id="days">00</span>
+            <div class="timer-box">
+                <span class="number" id="d">00</span>
                 <span class="label">Dias</span>
             </div>
-            <div class="timer-slot">
-                <span class="number" id="hours">00</span>
+            <div class="timer-box">
+                <span class="number" id="h">00</span>
                 <span class="label">Horas</span>
             </div>
-            <div class="timer-slot">
-                <span class="number" id="minutes">00</span>
+            <div class="timer-box">
+                <span class="number" id="m">00</span>
                 <span class="label">Minutos</span>
             </div>
-            <div class="timer-slot seconds">
-                <span class="number" id="seconds">00</span>
+            <div class="timer-box segundos">
+                <span class="number" id="s">00</span>
                 <span class="label">Segundos</span>
             </div>
         </section>
 
-        <!-- Barra de Progresso -->
-        <section class="progress-section">
-            <div class="progress-info">
+        <section class="progress-container">
+            <div class="progress-header">
                 <span>Conclusão da Jornada</span>
-                <span id="perc-val">0%</span>
+                <span id="percent-text">0%</span>
             </div>
-            <div class="progress-track">
-                <div class="progress-fill" id="progressBar"></div>
+            <div class="track">
+                <div class="fill" id="bar"></div>
             </div>
         </section>
 
-        <!-- Rodapé -->
-        <footer class="footer-section">
-            <h1 class="chamada-final">
-                Para o início do curso de formação da PC-RR
-            </h1>
+        <footer class="footer-text">
+            <h1 class="frase-final">Para o início do curso de formação da PC-RR</h1>
         </footer>
 
-        <!-- Ações -->
-        <div class="btn-container">
-            <button class="btn btn-audio" id="toggleMusic">
+        <div class="btn-group">
+            <button class="btn btn-audio" id="btnPlay">
                 <i class="fas fa-play"></i> Ativar Trilha
             </button>
-            <a href="#" class="btn btn-share" id="shareWA" target="_blank">
+            <a href="#" class="btn btn-share" id="waShare" target="_blank">
                 <i class="fab fa-whatsapp"></i> Compartilhar
             </a>
         </div>
-    </main>
+    </div>
 
     <script>
-        const audio = document.getElementById('bgMusic');
-        const btnM = document.getElementById('toggleMusic');
+        const audio = document.getElementById('musica');
+        const btnM = document.getElementById('btnPlay');
 
-        // Controle da Música
         btnM.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
@@ -328,46 +250,49 @@
             }
         });
 
-        function updateCountdown() {
-            // Configurações de Data
-            const targetDate = new Date(2026, 8, 8, 0, 0, 0).getTime();
-            const startDate = new Date(2024, 0, 1).getTime(); // Referência para a barra
-            const now = new Date().getTime();
-            const diff = targetDate - now;
+        function engine() {
+            // FIM DA JORNADA: 08/09/2026
+            const dataFinal = new Date(2026, 8, 8, 0, 0, 0).getTime();
+            // INÍCIO DA JORNADA: 01/03/2026
+            const dataInicial = new Date(2026, 2, 1, 0, 0, 0).getTime(); 
+            
+            const agora = new Date().getTime();
+            const diff = dataFinal - agora;
 
             if (diff <= 0) {
-                document.querySelector('.main-container').innerHTML = "<h1>OPERAÇÃO INICIADA</h1>";
+                document.querySelector('.main-container').innerHTML = "<h1>O CURSO COMEÇOU! 👮‍♂️</h1>";
                 return;
             }
 
-            // Cálculos de Tempo
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            // Relógio
+            const dias = Math.floor(diff / 86400000);
+            const horas = Math.floor((diff % 86400000) / 3600000);
+            const mins = Math.floor((diff % 3600000) / 60000);
+            const segs = Math.floor((diff % 60000) / 1000);
 
-            // Atualização do DOM
-            document.getElementById('days').innerText = d.toString().padStart(2, '0');
-            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+            document.getElementById('d').innerText = dias.toString().padStart(2, '0');
+            document.getElementById('h').innerText = horas.toString().padStart(2, '0');
+            document.getElementById('m').innerText = mins.toString().padStart(2, '0');
+            document.getElementById('s').innerText = segs.toString().padStart(2, '0');
 
-            // Barra de Progresso
-            const totalDuration = targetDate - startDate;
-            const elapsed = now - startDate;
-            const percentage = Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100);
-            
-            document.getElementById('progressBar').style.width = percentage + "%";
-            document.getElementById('perc-val').innerText = Math.floor(percentage) + "%";
+            // BARRA DE PROGRESSO
+            const tempoTotalJornada = dataFinal - dataInicial;
+            const tempoDecorrido = agora - dataInicial;
+            let porcentagem = (tempoDecorrido / tempoTotalJornada) * 100;
 
-            // Link de Compartilhamento
-            const shareText = `Faltam apenas ${d} dias para o curso de formação da PC-RR! 💀🚓`;
-            document.getElementById('shareWA').href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            // Limitação para não ser negativa antes de 01/03/2026 e nem passar de 100%
+            porcentagem = Math.min(Math.max(porcentagem, 0), 100);
+
+            document.getElementById('bar').style.width = porcentagem.toFixed(2) + "%";
+            document.getElementById('percent-text').innerText = Math.floor(porcentagem) + "%";
+
+            // Whatsapp
+            const txt = encodeURIComponent(`Faltam ${dias} dias para o início do curso de formação da PC-RR! 🚔💀`);
+            document.getElementById('waShare').href = `https://wa.me/?text=${txt}`;
         }
 
-        // Inicialização
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+        setInterval(engine, 1000);
+        engine();
     </script>
 </body>
 </html>
