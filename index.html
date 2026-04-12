@@ -68,10 +68,19 @@
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 5px;
+            font-weight: 600;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        /* Nova frase adicionada */
+        .desc-topo {
+            font-size: 1.2rem;
             font-weight: 800;
             color: var(--navy);
+            text-transform: uppercase;
             margin-bottom: 30px;
-            opacity: 0.8;
+            line-height: 1.3;
         }
 
         .timer-grid {
@@ -206,6 +215,7 @@
             .timer-grid { grid-template-columns: repeat(2, 1fr); }
             .main-container { padding: 40px 20px; }
             .frase-final { font-size: 1.2rem; }
+            .desc-topo { font-size: 1rem; }
             .btn-group { flex-direction: column; }
             .btn { width: 100%; justify-content: center; }
         }
@@ -219,9 +229,9 @@
 
     <div class="main-container">
         <header>
-            <!-- Adicionei um placeholder de brasão caso o arquivo suma -->
             <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
-            <h2 class="subtitulo">Contagem Regressiva</h2>
+            <h2 class="subtitulo">Faltam apenas</h2>
+            <h1 class="desc-topo">Para o início do curso de formação da PC-RR</h1>
         </header>
 
         <section class="timer-grid">
@@ -268,9 +278,6 @@
     </div>
 
     <script>
-        // --- CONFIGURAÇÃO DE DATAS ---
-        // Formato: Ano, Mês (0-11), Dia, Hora, Min, Seg
-        // Mês 8 = Setembro | Mês 2 = Março
         const DATA_OBJETIVO = new Date(2026, 8, 8, 0, 0, 0).getTime();
         const DATA_INICIAL = new Date(2026, 2, 1, 0, 0, 0).getTime(); 
 
@@ -304,19 +311,16 @@
                 return;
             }
 
-            // Cálculos do Tempo
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const segs = Math.floor((diff % (1000 * 60)) / 1000);
 
-            // Atualização do HTML com zero à esquerda
             document.getElementById('d').innerText = dias.toString().padStart(2, '0');
             document.getElementById('h').innerText = horas.toString().padStart(2, '0');
             document.getElementById('m').innerText = mins.toString().padStart(2, '0');
             document.getElementById('s').innerText = segs.toString().padStart(2, '0');
 
-            // BARRA DE PROGRESSO
             const total = DATA_OBJETIVO - DATA_INICIAL;
             const decorrido = agora - DATA_INICIAL;
             let perc = (decorrido / total) * 100;
@@ -325,8 +329,7 @@
             document.getElementById('bar').style.width = perc.toFixed(2) + "%";
             document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
 
-            // Link WhatsApp
-            const shareText = `Faltam ${dias} dias para o curso da PC-RR! A caveira vai sorrir! 🚔💀`;
+            const shareText = `Faltam ${dias} dias para o curso da PC-RR! 🚔💀`;
             document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
         }
 
