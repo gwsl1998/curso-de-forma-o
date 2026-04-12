@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contagem Regressiva - PCRR</title>
+    <title>Painel Oficial - Contagem Regressiva PCRR</title>
     
     <!-- Fontes e Ícones -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary-blue: #0073CF;
-            --accent-gold: #D4AF37;
-            --danger-red: #cc0000;
-            --text-dark: #2d3436;
+            --primary-navy: #002D5B; /* Azul Institucional Profundo */
+            --accent-gold: #B8860B;  /* Dourado Metalizado */
+            --danger-crimson: #A00000; /* Vermelho Alerta Sóbrio */
+            --bg-canvas: #f4f7f9;
+            --text-main: #1e272e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,236 +26,326 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: radial-gradient(circle at center, #ffffff 0%, #dfe6e9 100%);
+            background-color: var(--bg-canvas);
+            background-image: radial-gradient(#d1d8e0 0.5px, transparent 0.5px);
+            background-size: 20px 20px; /* Sutil textura de fundo */
+            color: var(--text-main);
             padding: 20px;
         }
 
-        .main-container {
+        .main-card {
             text-align: center;
-            background-color: white;
-            padding: 30px 20px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            border-top: 8px solid var(--accent-gold);
+            background-color: #ffffff;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+            border-top: 10px solid var(--primary-navy);
             width: 100%;
-            max-width: 550px;
-            animation: fadeIn 1s ease-out;
+            max-width: 650px;
+            position: relative;
+            animation: slideUp 0.8s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .top-badge { width: 85px; margin-bottom: 15px; }
-
-        .relogio-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
+        .brasao-container {
+            margin-bottom: 30px;
         }
 
-        .caixa {
-            background: #f8f9fa;
-            padding: 12px 2px;
-            border-radius: 15px;
-            flex: 1;
-            min-width: 75px;
-            border-bottom: 5px solid var(--primary-blue);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        .brasao-pcrr {
+            width: 110px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            transition: transform 0.4s ease;
         }
 
-        .numero {
-            font-size: 2.2rem;
+        .titulo-painel {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 700;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+        }
+
+        /* Relógio Profissional */
+        .grid-timer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 45px;
+        }
+
+        .timer-box {
+            background: #ffffff;
+            padding: 20px 10px;
+            border-radius: 12px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-box::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-navy);
+        }
+
+        .timer-box.seconds::after {
+            background: var(--danger-crimson);
+        }
+
+        .time-val {
+            font-size: 3rem;
             font-weight: 900;
-            color: var(--primary-blue);
+            color: var(--primary-navy);
             line-height: 1;
             display: block;
         }
 
-        .label {
-            font-size: 0.6rem;
+        .timer-box.seconds .time-val {
+            color: var(--danger-crimson);
+        }
+
+        .time-label {
+            font-size: 0.7rem;
             text-transform: uppercase;
             font-weight: 700;
-            color: #b2bec3;
-            margin-top: 5px;
+            color: #a0aec0;
+            margin-top: 10px;
             display: block;
         }
 
-        .caixa-segundos { border-bottom-color: var(--danger-red); }
-        .caixa-segundos .numero { color: var(--danger-red); }
+        /* Barra de Jornada */
+        .status-container {
+            margin-bottom: 40px;
+        }
 
-        /* Container da Imagem */
-        .container-imagem {
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .bar-outer {
             width: 100%;
+            height: 10px;
+            background: #edf2f7;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .bar-inner {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-navy), var(--accent-gold));
+            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.5, 1);
+        }
+
+        .footer-info {
+            border-top: 1px solid #edf2f7;
+            padding-top: 30px;
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .destaque-final {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary-navy);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        /* Botões de Ação */
+        .action-group {
             display: flex;
             justify-content: center;
-            margin-bottom: 15px;
-            min-height: 250px; /* Reserva o espaço enquanto a imagem pesada carrega */
+            gap: 15px;
+            margin-top: 40px;
         }
 
-        .imagem-destaque {
-            max-height: 300px;
-            width: auto;
-            display: block;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
-        }
-
-        /* Barra de Progresso */
-        .progress-wrapper {
-            width: 100%;
-            height: 12px;
-            background: #eee;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            border: 1px solid #ddd;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-blue), var(--accent-gold));
-            width: 0%;
-            transition: width 1s linear;
-        }
-
-        .vermelho-destaque {
-            color: var(--danger-red); 
-            font-weight: 900;
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            line-height: 1.1;
-        }
-
-        .controls {
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
         }
 
         .btn-audio {
-            background: #f1f3f5;
-            border: 1px solid #ddd;
-            padding: 8px 18px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            color: #444;
-            font-family: 'Montserrat', sans-serif;
+            background: #ffffff;
+            color: var(--primary-navy);
+            border: 2px solid var(--primary-navy);
+        }
+
+        .btn-audio:hover {
+            background: var(--primary-navy);
+            color: #ffffff;
         }
 
         .btn-share {
-            padding: 12px 25px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            background: #27ae60;
+            color: #ffffff;
+            border: none;
         }
 
-        @media (max-width: 480px) {
-            .numero { font-size: 1.7rem; }
-            .caixa { min-width: 65px; }
-            .vermelho-destaque { font-size: 1.4rem; }
-            .imagem-destaque { max-height: 220px; }
+        .btn-share:hover {
+            background: #219150;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .main-card { padding: 30px 20px; }
+            .grid-timer { gap: 8px; }
+            .time-val { font-size: 1.8rem; }
+            .destaque-final { font-size: 1.5rem; }
+            .action-group { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Áudio de fundo -->
     <audio id="musicaFundo" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="main-container">
-        <img src="brasao_pcrr.png" alt="PCRR" class="top-badge">
-        
-        <div class="relogio-container">
-            <div class="caixa">
-                <span class="numero" id="dias">00</span>
-                <span class="label">Dias</span>
+    <div class="main-card">
+        <div class="brasao-container">
+            <img src="brasao_pcrr.png" alt="Brasão PCRR" class="brasao-pcrr">
+        </div>
+
+        <h2 class="titulo-painel">Contagem Regressiva Oficial</h2>
+
+        <!-- Timer Grid -->
+        <div class="grid-timer">
+            <div class="timer-box">
+                <span class="time-val" id="dias">00</span>
+                <span class="time-label">Dias</span>
             </div>
-            <div class="caixa">
-                <span class="numero" id="horas">00</span>
-                <span class="label">Horas</span>
+            <div class="timer-box">
+                <span class="time-val" id="horas">00</span>
+                <span class="time-label">Horas</span>
             </div>
-            <div class="caixa">
-                <span class="numero" id="minutos">00</span>
-                <span class="label">Minutos</span>
+            <div class="timer-box">
+                <span class="time-val" id="minutos">00</span>
+                <span class="time-label">Min</span>
             </div>
-            <div class="caixa caixa-segundos">
-                <span class="numero" id="segundos">00</span>
-                <span class="label">Segundos</span>
+            <div class="timer-box seconds">
+                <span class="time-val" id="segundos">00</span>
+                <span class="time-label">Seg</span>
             </div>
         </div>
 
-        <!-- O NOME DO ARQUIVO AGORA ESTÁ 100% CORRETO -->
-        <div class="container-imagem">
-            <img src="foto-curso.png" alt="Personagem PCRR" class="imagem-destaque">
+        <!-- Barra de Status -->
+        <div class="status-container">
+            <div class="progress-label">
+                <span>Progresso da Jornada</span>
+                <span id="perc-text">0%</span>
+            </div>
+            <div class="bar-outer">
+                <div class="bar-inner" id="progressBar"></div>
+            </div>
         </div>
 
-        <div class="progress-wrapper">
-            <div class="progress-bar" id="progressBar"></div>
+        <!-- Rodapé Informativo -->
+        <div class="footer-info">
+            <p class="footer-text">Previsão de Início do</p>
+            <h1 class="destaque-final">Curso de Formação PCRR</h1>
         </div>
 
-        <p style="color: #666; font-weight: 600; font-size: 0.9rem; margin-bottom: 5px;">Para o início do</p>
-        <h1 class="vermelho-destaque">Curso de Formação PCRR</h1>
-
-        <div class="controls">
-            <button id="btnMusica" class="btn-audio">
-                <i class="fas fa-play"></i> Ativar Trilha Sonora
+        <!-- Controles -->
+        <div class="action-group">
+            <button id="btnMusica" class="btn btn-audio">
+                <i class="fas fa-play"></i> Trilha Sonora
             </button>
-            <a href="#" id="whatsappBtn" class="btn-share" target="_blank">
-                <i class="fab fa-whatsapp"></i> Compartilhar progresso
+            <a href="#" id="whatsappBtn" class="btn btn-share" target="_blank">
+                <i class="fab fa-whatsapp"></i> Compartilhar link
             </a>
         </div>
     </div>
 
     <script>
-        const musica = document.getElementById('musicaFundo');
+        // Sistema de Áudio
+        const audio = document.getElementById('musicaFundo');
         const btnM = document.getElementById('btnMusica');
         btnM.addEventListener('click', () => {
-            if (musica.paused) { musica.play(); btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar Trilha'; }
-            else { musica.pause(); btnM.innerHTML = '<i class="fas fa-play"></i> Ativar Trilha Sonora'; }
+            if (audio.paused) {
+                audio.play();
+                btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar Trilha';
+                btnM.style.background = "#002D5B";
+                btnM.style.color = "white";
+            } else {
+                audio.pause();
+                btnM.innerHTML = '<i class="fas fa-play"></i> Trilha Sonora';
+                btnM.style.background = "white";
+                btnM.style.color = "#002D5B";
+            }
         });
 
-        function update() {
-            const final = new Date(2026, 8, 8, 0, 0, 0).getTime();
-            const inicio = new Date(2024, 0, 1).getTime();
+        // Lógica de Tempo
+        function updateDashboard() {
+            const dataMeta = new Date(2026, 8, 8, 0, 0, 0).getTime();
+            const dataBase = new Date(2024, 0, 1).getTime();
             const agora = new Date().getTime();
-            const diff = final - agora;
+            const restante = dataMeta - agora;
 
-            if (diff <= 0) {
-                document.querySelector('.main-container').innerHTML = "<h1>O CURSO COMEÇOU! 👮‍♂️</h1>";
+            if (restante <= 0) {
+                document.querySelector('.main-card').innerHTML = "<h1>OPERAÇÃO INICIADA</h1><p>O Curso de Formação começou.</p>";
                 return;
             }
 
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
+            // Cálculos
+            const d = Math.floor(restante / 86400000);
+            const h = Math.floor((restante % 86400000) / 3600000);
+            const m = Math.floor((restante % 3600000) / 60000);
+            const s = Math.floor((restante % 60000) / 1000);
 
+            // Interface
             document.getElementById('dias').innerText = d.toString().padStart(2, '0');
             document.getElementById('horas').innerText = h.toString().padStart(2, '0');
             document.getElementById('minutos').innerText = m.toString().padStart(2, '0');
             document.getElementById('segundos').innerText = s.toString().padStart(2, '0');
 
-            const perc = ((agora - inicio) / (final - inicio)) * 100;
-            document.getElementById('progressBar').style.width = Math.min(Math.max(perc, 0), 100) + "%";
+            // Barra de Progresso
+            const total = dataMeta - dataBase;
+            const decorrido = agora - dataBase;
+            const perc = Math.min(Math.max((decorrido / total) * 100, 0), 100);
+            document.getElementById('progressBar').style.width = perc + "%";
+            document.getElementById('perc-text').innerText = Math.floor(perc) + "%";
             
-            document.getElementById('whatsappBtn').href = `https://wa.me/?text=${encodeURIComponent('Faltam ' + d + ' dias para o Curso da PCRR! 🔥')}`;
+            // Compartilhamento
+            const msg = encodeURIComponent(`Faltam ${d} dias para o início do Curso de Formação da PCRR! 👮‍♂️⚖️`);
+            document.getElementById('whatsappBtn').href = `https://wa.me/?text=${msg}`;
         }
-        setInterval(update, 1000);
-        update();
-    </script>
-</body>
-</html>
+
+        setInterval(updateDashboard, 1000);
+        updateDashboard();
     </script>
 </body>
 </html>
