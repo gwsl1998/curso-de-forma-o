@@ -22,6 +22,7 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #0a0e14;
+            /* Fundo com padrão sutil e gradiente escuro */
             background-image: 
                 linear-gradient(rgba(0, 45, 91, 0.9), rgba(10, 14, 20, 0.95)),
                 url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
@@ -37,7 +38,7 @@
             background: var(--glass);
             width: 100%;
             max-width: 650px;
-            padding: 40px 30px; /* Reduzi um pouco o padding para caber a foto melhor */
+            padding: 50px 30px;
             border-radius: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.2);
@@ -46,6 +47,7 @@
             overflow: hidden;
         }
 
+        /* Detalhe no topo */
         .main-container::before {
             content: "";
             position: absolute;
@@ -55,54 +57,40 @@
         }
 
         .brasao {
-            width: 90px;
-            margin-bottom: 10px;
+            width: 100px;
+            margin-bottom: 20px;
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+            transition: transform 0.3s ease;
         }
+        .brasao:hover { transform: scale(1.05); }
 
         .subtitulo {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 5px;
             font-weight: 800;
             color: var(--navy);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             opacity: 0.8;
-        }
-
-        /* --- ESTILO DA IMAGEM DO CURSO --- */
-        .foto-curso {
-            height: 280px; /* Altura ideal para desktop */
-            width: auto;
-            max-width: 100%;
-            display: block;
-            margin: 0 auto 25px auto;
-            object-fit: contain;
-            /* Filtro de sombra que contorna o personagem */
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
-            transition: transform 0.3s ease;
-        }
-        .foto-curso:hover {
-            transform: translateY(-5px);
         }
 
         .timer-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .timer-box {
             background: #fff;
-            padding: 18px 10px;
+            padding: 20px 10px;
             border-radius: 18px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             border: 1px solid #eee;
         }
 
         .number {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 900;
             color: var(--navy);
             display: block;
@@ -116,12 +104,12 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.05); opacity: 0.8; }
             100% { transform: scale(1); }
         }
 
         .label {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 700;
             color: #888;
@@ -130,25 +118,25 @@
         }
 
         .progress-container {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             background: #fff;
-            padding: 15px;
+            padding: 20px;
             border-radius: 20px;
         }
 
         .progress-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 800;
             color: var(--navy);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             text-transform: uppercase;
         }
 
         .track {
             width: 100%;
-            height: 10px;
+            height: 12px;
             background: #e9ecef;
             border-radius: 10px;
             overflow: hidden;
@@ -158,15 +146,16 @@
             height: 100%;
             width: 0%; 
             background: linear-gradient(90deg, var(--navy), #1a5a99);
+            box-shadow: 0 0 10px rgba(0,45,91,0.3);
             transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .frase-final {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 900;
             color: var(--navy);
             text-transform: uppercase;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             line-height: 1.2;
         }
 
@@ -177,10 +166,10 @@
         }
 
         .btn {
-            padding: 14px 22px;
+            padding: 15px 25px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
             text-decoration: none;
             display: inline-flex;
@@ -191,15 +180,32 @@
             border: none;
         }
 
-        .btn-audio { background: white; color: var(--navy); border: 2px solid var(--navy); }
-        .btn-audio:hover { background: var(--navy); color: white; }
-        .btn-share { background: #25D366; color: white; }
+        .btn-audio { 
+            background: white; 
+            color: var(--navy); 
+            border: 2px solid var(--navy);
+        }
+        
+        .btn-audio:hover { 
+            background: var(--navy); 
+            color: white; 
+        }
+
+        .btn-share { 
+            background: #25D366; 
+            color: white; 
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-share:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(37, 211, 102, 0.3);
+        }
 
         @media (max-width: 600px) {
-            .foto-curso { height: 200px; } /* Menor no celular para não empurrar o resto */
             .timer-grid { grid-template-columns: repeat(2, 1fr); }
-            .main-container { padding: 30px 15px; }
-            .frase-final { font-size: 1.1rem; }
+            .main-container { padding: 40px 20px; }
+            .frase-final { font-size: 1.2rem; }
             .btn-group { flex-direction: column; }
             .btn { width: 100%; justify-content: center; }
         }
@@ -213,11 +219,9 @@
 
     <div class="main-container">
         <header>
-            <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.style.display='none'">
+            <!-- Adicionei um placeholder de brasão caso o arquivo suma -->
+            <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
             <h2 class="subtitulo">Contagem Regressiva</h2>
-            
-            <!-- AQUI ESTÁ A SUA IMAGEM -->
-            <img src="foto-curso.png" alt="Policial PCRR" class="foto-curso">
         </header>
 
         <section class="timer-grid">
@@ -264,7 +268,9 @@
     </div>
 
     <script>
-        // CONFIGURAÇÃO DE DATAS
+        // --- CONFIGURAÇÃO DE DATAS ---
+        // Formato: Ano, Mês (0-11), Dia, Hora, Min, Seg
+        // Mês 8 = Setembro | Mês 2 = Março
         const DATA_OBJETIVO = new Date(2026, 8, 8, 0, 0, 0).getTime();
         const DATA_INICIAL = new Date(2026, 2, 1, 0, 0, 0).getTime(); 
 
@@ -273,7 +279,7 @@
 
         btnM.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play();
+                audio.play().catch(e => alert("Clique na tela primeiro para permitir o áudio!"));
                 btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar Trilha';
                 btnM.style.background = "#002D5B";
                 btnM.style.color = "white";
@@ -291,21 +297,26 @@
 
             if (diff <= 0) {
                 document.querySelector('.main-container').innerHTML = `
-                    <h1 style="color:var(--navy); margin-top:20px">CHEGOU A HORA! 👮‍♂️</h1>
+                    <img src="brasao_pcrr.png" width="100" style="margin-bottom:20px">
+                    <h1 style="color:var(--navy); margin-bottom:20px">CHEGOU A HORA! 👮‍♂️</h1>
+                    <p style="font-weight:800; text-transform:uppercase">O curso de formação começou.</p>
                 `;
                 return;
             }
 
+            // Cálculos do Tempo
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const segs = Math.floor((diff % (1000 * 60)) / 1000);
 
+            // Atualização do HTML com zero à esquerda
             document.getElementById('d').innerText = dias.toString().padStart(2, '0');
             document.getElementById('h').innerText = horas.toString().padStart(2, '0');
             document.getElementById('m').innerText = mins.toString().padStart(2, '0');
             document.getElementById('s').innerText = segs.toString().padStart(2, '0');
 
+            // BARRA DE PROGRESSO
             const total = DATA_OBJETIVO - DATA_INICIAL;
             const decorrido = agora - DATA_INICIAL;
             let perc = (decorrido / total) * 100;
@@ -314,7 +325,8 @@
             document.getElementById('bar').style.width = perc.toFixed(2) + "%";
             document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
 
-            const shareText = `Faltam ${dias} dias para o curso da PC-RR! 🚔💀`;
+            // Link WhatsApp
+            const shareText = `Faltam ${dias} dias para o curso da PC-RR! A caveira vai sorrir! 🚔💀`;
             document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
         }
 
