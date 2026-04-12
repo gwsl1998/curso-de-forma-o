@@ -246,7 +246,6 @@
             </div>
         </section>
 
-        <!-- FRASE MOVIDA PARA CIMA DO ESPERÔMETRO -->
         <h1 class="frase-final">Para o início do Curso de Formação da PC-RR</h1>
 
         <section class="progress-container">
@@ -263,7 +262,7 @@
 
         <div class="btn-group">
             <button class="btn btn-audio" id="btnPlay">
-                <i class="fas fa-play"></i> Trilha Sonora
+                <i class="fas fa-play"></i> Canção do CR
             </button>
         </div>
     </div>
@@ -278,12 +277,12 @@
         btnM.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play().catch(e => alert("Clique na tela primeiro para permitir o áudio!"));
-                btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar Trilha';
+                btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar canção';
                 btnM.style.background = "#002D5B";
                 btnM.style.color = "white";
             } else {
                 audio.pause();
-                btnM.innerHTML = '<i class="fas fa-play"></i> Trilha Sonora';
+                btnM.innerHTML = '<i class="fas fa-play"></i> Canção do CR';
                 btnM.style.background = "white";
                 btnM.style.color = "#002D5B";
             }
