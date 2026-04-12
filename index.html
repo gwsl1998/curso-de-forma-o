@@ -38,7 +38,7 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
-            display: none; /* Escondido por padrão */
+            display: none; 
             justify-content: center;
             align-items: center;
             z-index: 10000;
@@ -83,7 +83,7 @@
         }
         .btn-modal:hover { background: var(--gold); }
 
-        /* --- RESTANTE DO SITE --- */
+        /* --- CONTAINER PRINCIPAL --- */
         .main-container {
             background: var(--glass);
             width: 100%;
@@ -205,6 +205,7 @@
             transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* --- NOVA ANIMAÇÃO TÁTICA DO PERSONAGEM --- */
         .foto-je {
             height: 220px; 
             width: auto;
@@ -213,6 +214,21 @@
             margin: 0 auto 20px auto;
             object-fit: contain;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
+            
+            /* Define que o movimento de baixar/encolher acontece a partir do chão */
+            transform-origin: bottom; 
+            
+            /* Inicia o ciclo de treinamento tático */
+            animation: treino-tatico 10s ease-in-out infinite;
+        }
+
+        @keyframes treino-tatico {
+            0%, 10% { transform: scaleY(1) translateY(0); }             /* POSIÇÃO: Sentido */
+            15% { transform: scaleY(1) translateY(-40px); }            /* MOVIMENTO: Pulo (Subida) */
+            20% { transform: scaleY(1) translateY(0); }                 /* MOVIMENTO: Pulo (Queda) */
+            25%, 45% { transform: scaleY(0.65) translateY(0); }         /* POSIÇÃO: Ajoelhar (Encolhe altura) */
+            55%, 85% { transform: scaleY(0.30) translateY(15px); }      /* POSIÇÃO: Deitar/Pronto (Achata no chão) */
+            95%, 100% { transform: scaleY(1) translateY(0); }           /* POSIÇÃO: Levanta/Sentido */
         }
 
         .btn-group {
@@ -237,16 +253,8 @@
             border: none;
         }
 
-        .btn-audio { 
-            background: white; 
-            color: var(--navy); 
-            border: 2px solid var(--navy);
-        }
-        
-        .btn-audio:hover { 
-            background: var(--navy); 
-            color: white; 
-        }
+        .btn-audio { background: white; color: var(--navy); border: 2px solid var(--navy); }
+        .btn-audio:hover { background: var(--navy); color: white; }
 
         @media (max-width: 600px) {
             .timer-grid { grid-template-columns: repeat(2, 1fr); }
@@ -319,7 +327,6 @@
     </div>
 
     <script>
-        // Lógica do Alerta (Aparece apenas 1 vez por navegador)
         window.onload = function() {
             if (!localStorage.getItem('alertaPcrrExibido')) {
                 document.getElementById('modalAlerta').style.display = 'flex';
