@@ -13,65 +13,67 @@
             --navy: #002D5B; 
             --gold: #B8860B;  
             --red: #C0392B;   
-            --light-bg: #f0f2f5;
-            --glass: rgba(255, 255, 255, 0.95);
+            --light-bg: #F1F5F9;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #0a0e14;
-            /* Fundo com padrão sutil e gradiente escuro */
-            background-image: 
-                linear-gradient(rgba(0, 45, 91, 0.9), rgba(10, 14, 20, 0.95)),
-                url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            background-color: var(--light-bg);
+            background-image: radial-gradient(#CBD5E0 0.5px, transparent 0.5px);
+            background-size: 30px 30px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            color: #333;
         }
 
         .main-container {
-            background: var(--glass);
+            background: #FFFFFF;
             width: 100%;
-            max-width: 650px;
-            padding: 50px 30px;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 700px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+            border-top: 12px solid var(--navy);
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        /* Detalhe no topo */
-        .main-container::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 8px;
-            background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .brasao {
-            width: 100px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-            transition: transform 0.3s ease;
+            width: 80px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
         }
-        .brasao:hover { transform: scale(1.05); }
 
         .subtitulo {
             font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 5px;
-            font-weight: 800;
-            color: var(--navy);
-            margin-bottom: 30px;
-            opacity: 0.8;
+            letter-spacing: 4px;
+            font-weight: 600;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+
+        /* --- ESTILO DA NOVA IMAGEM --- */
+        .foto-curso {
+            width: auto;
+            max-width: 100%;
+            height: 250px; /* Altura ideal para não empurrar o relógio para fora da tela */
+            object-fit: contain;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+            transition: transform 0.3s ease;
+        }
+        .foto-curso:hover {
+            transform: scale(1.02);
         }
 
         .timer-grid {
@@ -82,46 +84,36 @@
         }
 
         .timer-box {
-            background: #fff;
-            padding: 20px 10px;
-            border-radius: 18px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
+            background: #FFFFFF;
+            padding: 20px 5px;
+            border-radius: 16px;
+            border: 1px solid #E2E8F0;
+            border-bottom: 5px solid var(--navy);
         }
+
+        .timer-box.segundos { border-bottom-color: var(--red); }
 
         .number {
             font-size: 2.8rem;
             font-weight: 900;
             color: var(--navy);
-            display: block;
             line-height: 1;
         }
 
-        .timer-box.segundos .number {
-            color: var(--red);
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); }
-        }
+        .timer-box.segundos .number { color: var(--red); }
 
         .label {
             font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 700;
-            color: #888;
+            color: #A0AEC0;
             margin-top: 8px;
             display: block;
         }
 
         .progress-container {
             margin-bottom: 40px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 20px;
+            text-align: left;
         }
 
         .progress-header {
@@ -136,18 +128,18 @@
 
         .track {
             width: 100%;
-            height: 12px;
-            background: #e9ecef;
-            border-radius: 10px;
+            height: 14px;
+            background: #EDF2F7;
+            border-radius: 50px;
             overflow: hidden;
+            border: 1px solid #E2E8F0;
         }
 
         .fill {
             height: 100%;
             width: 0%; 
-            background: linear-gradient(90deg, var(--navy), #1a5a99);
-            box-shadow: 0 0 10px rgba(0,45,91,0.3);
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, var(--navy), var(--gold));
+            transition: width 1s linear;
         }
 
         .frase-final {
@@ -155,19 +147,20 @@
             font-weight: 900;
             color: var(--navy);
             text-transform: uppercase;
-            margin-bottom: 30px;
             line-height: 1.2;
+            margin-top: 20px;
         }
 
         .btn-group {
             display: flex;
             justify-content: center;
             gap: 15px;
+            margin-top: 35px;
         }
 
         .btn {
-            padding: 15px 25px;
-            border-radius: 50px;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 0.85rem;
             cursor: pointer;
@@ -175,36 +168,19 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.3s;
+            transition: 0.3s;
             text-transform: uppercase;
             border: none;
         }
 
-        .btn-audio { 
-            background: white; 
-            color: var(--navy); 
-            border: 2px solid var(--navy);
-        }
-        
-        .btn-audio:hover { 
-            background: var(--navy); 
-            color: white; 
-        }
-
-        .btn-share { 
-            background: #25D366; 
-            color: white; 
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
-        }
-
-        .btn-share:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(37, 211, 102, 0.3);
-        }
+        .btn-audio { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+        .btn-audio:hover { background: var(--navy); color: white; }
+        .btn-share { background: #27AE60; color: white; box-shadow: 0 4px 14px rgba(39, 174, 96, 0.3); }
 
         @media (max-width: 600px) {
-            .timer-grid { grid-template-columns: repeat(2, 1fr); }
-            .main-container { padding: 40px 20px; }
+            .foto-curso { height: 180px; } /* Menor no celular para caber tudo */
+            .timer-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .number { font-size: 2.2rem; }
             .frase-final { font-size: 1.2rem; }
             .btn-group { flex-direction: column; }
             .btn { width: 100%; justify-content: center; }
@@ -219,9 +195,11 @@
 
     <div class="main-container">
         <header>
-            <!-- Adicionei um placeholder de brasão caso o arquivo suma -->
-            <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
-            <h2 class="subtitulo">Contagem Regressiva</h2>
+            <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao">
+            <h2 class="subtitulo">Faltam apenas</h2>
+            
+            <!-- AQUI ESTÁ SUA IMAGEM CONFIGURADA -->
+            <img src="foto-curso.png" alt="Policial PCRR" class="foto-curso">
         </header>
 
         <section class="timer-grid">
@@ -245,7 +223,7 @@
 
         <section class="progress-container">
             <div class="progress-header">
-                <span>Progresso da Espera</span>
+                <span>Conclusão da Jornada</span>
                 <span id="percent-text">0%</span>
             </div>
             <div class="track">
@@ -254,12 +232,12 @@
         </section>
 
         <footer class="footer-text">
-            <h1 class="frase-final">Início do Curso de Formação PC-RR</h1>
+            <h1 class="frase-final">Para o início do curso de formação da PC-RR</h1>
         </footer>
 
         <div class="btn-group">
             <button class="btn btn-audio" id="btnPlay">
-                <i class="fas fa-play"></i> Trilha Sonora
+                <i class="fas fa-play"></i> Ativar Trilha
             </button>
             <a href="#" class="btn btn-share" id="waShare" target="_blank">
                 <i class="fab fa-whatsapp"></i> Compartilhar
@@ -268,66 +246,56 @@
     </div>
 
     <script>
-        // --- CONFIGURAÇÃO DE DATAS ---
-        // Formato: Ano, Mês (0-11), Dia, Hora, Min, Seg
-        // Mês 8 = Setembro | Mês 2 = Março
-        const DATA_OBJETIVO = new Date(2026, 8, 8, 0, 0, 0).getTime();
-        const DATA_INICIAL = new Date(2026, 2, 1, 0, 0, 0).getTime(); 
-
+        // O restante do seu script permanece igual
         const audio = document.getElementById('musica');
         const btnM = document.getElementById('btnPlay');
 
         btnM.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play().catch(e => alert("Clique na tela primeiro para permitir o áudio!"));
+                audio.play();
                 btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar Trilha';
                 btnM.style.background = "#002D5B";
                 btnM.style.color = "white";
             } else {
                 audio.pause();
-                btnM.innerHTML = '<i class="fas fa-play"></i> Trilha Sonora';
-                btnM.style.background = "white";
+                btnM.innerHTML = '<i class="fas fa-play"></i> Ativar Trilha';
+                btnM.style.background = "transparent";
                 btnM.style.color = "#002D5B";
             }
         });
 
         function engine() {
+            const dataFinal = new Date(2026, 8, 8, 0, 0, 0).getTime();
+            const dataInicial = new Date(2026, 2, 1, 0, 0, 0).getTime(); 
+            
             const agora = new Date().getTime();
-            const diff = DATA_OBJETIVO - agora;
+            const diff = dataFinal - agora;
 
             if (diff <= 0) {
-                document.querySelector('.main-container').innerHTML = `
-                    <img src="brasao_pcrr.png" width="100" style="margin-bottom:20px">
-                    <h1 style="color:var(--navy); margin-bottom:20px">CHEGOU A HORA! 👮‍♂️</h1>
-                    <p style="font-weight:800; text-transform:uppercase">O curso de formação começou.</p>
-                `;
+                document.querySelector('.main-container').innerHTML = "<h1>O CURSO COMEÇOU! 👮‍♂️</h1>";
                 return;
             }
 
-            // Cálculos do Tempo
-            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const segs = Math.floor((diff % (1000 * 60)) / 1000);
+            const dias = Math.floor(diff / 86400000);
+            const horas = Math.floor((diff % 86400000) / 3600000);
+            const mins = Math.floor((diff % 3600000) / 60000);
+            const segs = Math.floor((diff % 60000) / 1000);
 
-            // Atualização do HTML com zero à esquerda
             document.getElementById('d').innerText = dias.toString().padStart(2, '0');
             document.getElementById('h').innerText = horas.toString().padStart(2, '0');
             document.getElementById('m').innerText = mins.toString().padStart(2, '0');
             document.getElementById('s').innerText = segs.toString().padStart(2, '0');
 
-            // BARRA DE PROGRESSO
-            const total = DATA_OBJETIVO - DATA_INICIAL;
-            const decorrido = agora - DATA_INICIAL;
-            let perc = (decorrido / total) * 100;
-            perc = Math.min(Math.max(perc, 0), 100);
+            const tempoTotalJornada = dataFinal - dataInicial;
+            const tempoDecorrido = agora - dataInicial;
+            let porcentagem = (tempoDecorrido / tempoTotalJornada) * 100;
+            porcentagem = Math.min(Math.max(porcentagem, 0), 100);
 
-            document.getElementById('bar').style.width = perc.toFixed(2) + "%";
-            document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
+            document.getElementById('bar').style.width = porcentagem.toFixed(2) + "%";
+            document.getElementById('percent-text').innerText = Math.floor(porcentagem) + "%";
 
-            // Link WhatsApp
-            const shareText = `Faltam ${dias} dias para o curso da PC-RR! A caveira vai sorrir! 🚔💀`;
-            document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+            const txt = encodeURIComponent(`Faltam ${dias} dias para o início do curso de formação da PC-RR! 🚔💀`);
+            document.getElementById('waShare').href = `https://wa.me/?text=${txt}`;
         }
 
         setInterval(engine, 1000);
