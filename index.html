@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Oficial - Contagem Regressiva PCRR</title>
+    <title>Contagem Regressiva - PCRR</title>
     
     <!-- Fontes e Ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -11,9 +11,9 @@
     
     <style>
         :root {
-            --primary-navy: #002D5B; /* Azul Institucional Profundo */
-            --accent-gold: #B8860B;  /* Dourado Metalizado */
-            --danger-crimson: #A00000; /* Vermelho Alerta Sóbrio */
+            --primary-navy: #002D5B; 
+            --accent-gold: #B8860B;  
+            --danger-crimson: #A00000; 
             --bg-canvas: #f4f7f9;
             --text-main: #1e272e;
         }
@@ -28,7 +28,7 @@
             min-height: 100vh;
             background-color: var(--bg-canvas);
             background-image: radial-gradient(#d1d8e0 0.5px, transparent 0.5px);
-            background-size: 20px 20px; /* Sutil textura de fundo */
+            background-size: 20px 20px;
             color: var(--text-main);
             padding: 20px;
         }
@@ -42,7 +42,6 @@
             border-top: 10px solid var(--primary-navy);
             width: 100%;
             max-width: 650px;
-            position: relative;
             animation: slideUp 0.8s ease-out;
         }
 
@@ -51,31 +50,24 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .brasao-container {
-            margin-bottom: 30px;
-        }
-
-        .brasao-pcrr {
-            width: 110px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-            transition: transform 0.4s ease;
-        }
+        .brasao-container { margin-bottom: 25px; }
+        .brasao-pcrr { width: 115px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
 
         .titulo-painel {
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             font-weight: 700;
             color: #7f8c8d;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
-        /* Relógio Profissional */
+        /* Relógio */
         .grid-timer {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
-            margin-bottom: 45px;
+            margin-bottom: 40px;
         }
 
         .timer-box {
@@ -84,35 +76,19 @@
             border-radius: 12px;
             border: 1px solid #edf2f7;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            position: relative;
-            overflow: hidden;
+            border-bottom: 4px solid var(--primary-navy);
         }
 
-        .timer-box::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--primary-navy);
-        }
-
-        .timer-box.seconds::after {
-            background: var(--danger-crimson);
-        }
+        .timer-box.seconds { border-bottom-color: var(--danger-crimson); }
 
         .time-val {
-            font-size: 3rem;
+            font-size: 3.2rem;
             font-weight: 900;
             color: var(--primary-navy);
             line-height: 1;
-            display: block;
         }
 
-        .timer-box.seconds .time-val {
-            color: var(--danger-crimson);
-        }
+        .timer-box.seconds .time-val { color: var(--danger-red); color: var(--danger-crimson); }
 
         .time-label {
             font-size: 0.7rem;
@@ -124,10 +100,7 @@
         }
 
         /* Barra de Jornada */
-        .status-container {
-            margin-bottom: 40px;
-        }
-
+        .status-container { margin-bottom: 40px; }
         .progress-label {
             display: flex;
             justify-content: space-between;
@@ -155,25 +128,19 @@
 
         .footer-info {
             border-top: 1px solid #edf2f7;
-            padding-top: 30px;
-        }
-
-        .footer-text {
-            font-size: 1.1rem;
-            font-weight: 400;
-            color: #718096;
-            margin-bottom: 8px;
+            padding-top: 35px;
         }
 
         .destaque-final {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 900;
             color: var(--primary-navy);
             text-transform: uppercase;
             letter-spacing: -1px;
+            line-height: 1;
         }
 
-        /* Botões de Ação */
+        /* Botões */
         .action-group {
             display: flex;
             justify-content: center;
@@ -202,35 +169,19 @@
             border: 2px solid var(--primary-navy);
         }
 
-        .btn-audio:hover {
-            background: var(--primary-navy);
-            color: #ffffff;
-        }
-
-        .btn-share {
-            background: #27ae60;
-            color: #ffffff;
-            border: none;
-        }
-
-        .btn-share:hover {
-            background: #219150;
-            transform: translateY(-2px);
-        }
+        .btn-audio:hover { background: var(--primary-navy); color: #ffffff; }
+        .btn-share { background: #27ae60; color: #ffffff; border: none; }
 
         @media (max-width: 600px) {
             .main-card { padding: 30px 20px; }
-            .grid-timer { gap: 8px; }
-            .time-val { font-size: 1.8rem; }
-            .destaque-final { font-size: 1.5rem; }
+            .time-val { font-size: 2rem; }
+            .destaque-final { font-size: 1.8rem; }
             .action-group { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Áudio de fundo -->
     <audio id="musicaFundo" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
@@ -240,9 +191,8 @@
             <img src="brasao_pcrr.png" alt="Brasão PCRR" class="brasao-pcrr">
         </div>
 
-        <h2 class="titulo-painel">Contagem Regressiva Oficial</h2>
+        <h2 class="titulo-painel">Faltam apenas</h2>
 
-        <!-- Timer Grid -->
         <div class="grid-timer">
             <div class="timer-box">
                 <span class="time-val" id="dias">00</span>
@@ -262,10 +212,9 @@
             </div>
         </div>
 
-        <!-- Barra de Status -->
         <div class="status-container">
             <div class="progress-label">
-                <span>Progresso da Jornada</span>
+                <span>Progresso para o Curso</span>
                 <span id="perc-text">0%</span>
             </div>
             <div class="bar-outer">
@@ -273,25 +222,21 @@
             </div>
         </div>
 
-        <!-- Rodapé Informativo -->
         <div class="footer-info">
-            <p class="footer-text">Previsão de Início do</p>
-            <h1 class="destaque-final">Curso de Formação PCRR</h1>
+            <h1 class="destaque-final">Curso de Formação</h1>
         </div>
 
-        <!-- Controles -->
         <div class="action-group">
             <button id="btnMusica" class="btn btn-audio">
                 <i class="fas fa-play"></i> Trilha Sonora
             </button>
             <a href="#" id="whatsappBtn" class="btn btn-share" target="_blank">
-                <i class="fab fa-whatsapp"></i> Compartilhar link
+                <i class="fab fa-whatsapp"></i> Compartilhar
             </a>
         </div>
     </div>
 
     <script>
-        // Sistema de Áudio
         const audio = document.getElementById('musicaFundo');
         const btnM = document.getElementById('btnMusica');
         btnM.addEventListener('click', () => {
@@ -308,7 +253,6 @@
             }
         });
 
-        // Lógica de Tempo
         function updateDashboard() {
             const dataMeta = new Date(2026, 8, 8, 0, 0, 0).getTime();
             const dataBase = new Date(2024, 0, 1).getTime();
@@ -316,32 +260,27 @@
             const restante = dataMeta - agora;
 
             if (restante <= 0) {
-                document.querySelector('.main-card').innerHTML = "<h1>OPERAÇÃO INICIADA</h1><p>O Curso de Formação começou.</p>";
+                document.querySelector('.main-card').innerHTML = "<h1>CURSO EM ANDAMENTO</h1>";
                 return;
             }
 
-            // Cálculos
             const d = Math.floor(restante / 86400000);
             const h = Math.floor((restante % 86400000) / 3600000);
             const m = Math.floor((restante % 3600000) / 60000);
             const s = Math.floor((restante % 60000) / 1000);
 
-            // Interface
             document.getElementById('dias').innerText = d.toString().padStart(2, '0');
             document.getElementById('horas').innerText = h.toString().padStart(2, '0');
             document.getElementById('minutos').innerText = m.toString().padStart(2, '0');
             document.getElementById('segundos').innerText = s.toString().padStart(2, '0');
 
-            // Barra de Progresso
             const total = dataMeta - dataBase;
             const decorrido = agora - dataBase;
             const perc = Math.min(Math.max((decorrido / total) * 100, 0), 100);
             document.getElementById('progressBar').style.width = perc + "%";
             document.getElementById('perc-text').innerText = Math.floor(perc) + "%";
             
-            // Compartilhamento
-            const msg = encodeURIComponent(`Faltam ${d} dias para o início do Curso de Formação da PCRR! 👮‍♂️⚖️`);
-            document.getElementById('whatsappBtn').href = `https://wa.me/?text=${msg}`;
+            document.getElementById('whatsappBtn').href = `https://wa.me/?text=Faltam ${d} dias para o início do Curso de Formação da PCRR!`;
         }
 
         setInterval(updateDashboard, 1000);
