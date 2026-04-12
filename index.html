@@ -205,7 +205,7 @@
             transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- NOVA ANIMAÇÃO TÁTICA DO PERSONAGEM --- */
+        /* --- ANIMAÇÃO DE SALTO ÚNICO --- */
         .foto-je {
             height: 220px; 
             width: auto;
@@ -215,20 +215,17 @@
             object-fit: contain;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
             
-            /* Define que o movimento de baixar/encolher acontece a partir do chão */
-            transform-origin: bottom; 
-            
-            /* Inicia o ciclo de treinamento tático */
-            animation: treino-tatico 10s ease-in-out infinite;
+            /* Animação com tempo considerável (5 segundos) */
+            animation: pulo-suave 5s ease-in-out infinite;
         }
 
-        @keyframes treino-tatico {
-            0%, 10% { transform: scaleY(1) translateY(0); }             /* POSIÇÃO: Sentido */
-            15% { transform: scaleY(1) translateY(-40px); }            /* MOVIMENTO: Pulo (Subida) */
-            20% { transform: scaleY(1) translateY(0); }                 /* MOVIMENTO: Pulo (Queda) */
-            25%, 45% { transform: scaleY(0.65) translateY(0); }         /* POSIÇÃO: Ajoelhar (Encolhe altura) */
-            55%, 85% { transform: scaleY(0.30) translateY(15px); }      /* POSIÇÃO: Deitar/Pronto (Achata no chão) */
-            95%, 100% { transform: scaleY(1) translateY(0); }           /* POSIÇÃO: Levanta/Sentido */
+        @keyframes pulo-suave {
+            /* Ele fica parado 80% do tempo (4 segundos) */
+            0%, 80%, 100% { transform: translateY(0); } 
+            
+            /* Ele pula e volta nos últimos 20% do tempo (1 segundo) */
+            85% { transform: translateY(-30px); } 
+            90% { transform: translateY(0); }
         }
 
         .btn-group {
