@@ -48,7 +48,6 @@
 
         .top-badge { width: 85px; margin-bottom: 15px; }
 
-        /* Estilo do Relógio */
         .relogio-container {
             display: flex;
             justify-content: center;
@@ -92,10 +91,11 @@
             display: flex;
             justify-content: center;
             margin-bottom: 15px;
+            min-height: 250px; /* Reserva o espaço enquanto a imagem pesada carrega */
         }
 
         .imagem-destaque {
-            max-height: 280px;
+            max-height: 300px;
             width: auto;
             display: block;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
@@ -168,16 +168,13 @@
 </head>
 <body>
 
-    <!-- Elemento de Áudio -->
     <audio id="musicaFundo" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
     <div class="main-container">
-        <!-- Brasão -->
         <img src="brasao_pcrr.png" alt="PCRR" class="top-badge">
         
-        <!-- Relógio -->
         <div class="relogio-container">
             <div class="caixa">
                 <span class="numero" id="dias">00</span>
@@ -197,12 +194,11 @@
             </div>
         </div>
 
-        <!-- Imagem do Personagem -->
+        <!-- O NOME DO ARQUIVO AGORA ESTÁ 100% CORRETO -->
         <div class="container-imagem">
             <img src="foto-curso.png" alt="Personagem PCRR" class="imagem-destaque">
         </div>
 
-        <!-- Barra de Progresso -->
         <div class="progress-wrapper">
             <div class="progress-bar" id="progressBar"></div>
         </div>
@@ -210,7 +206,6 @@
         <p style="color: #666; font-weight: 600; font-size: 0.9rem; margin-bottom: 5px;">Para o início do</p>
         <h1 class="vermelho-destaque">Curso de Formação PCRR</h1>
 
-        <!-- Controles -->
         <div class="controls">
             <button id="btnMusica" class="btn-audio">
                 <i class="fas fa-play"></i> Ativar Trilha Sonora
@@ -222,20 +217,13 @@
     </div>
 
     <script>
-        // Lógica de áudio
         const musica = document.getElementById('musicaFundo');
         const btnM = document.getElementById('btnMusica');
         btnM.addEventListener('click', () => {
-            if (musica.paused) {
-                musica.play();
-                btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar Trilha';
-            } else {
-                musica.pause();
-                btnM.innerHTML = '<i class="fas fa-play"></i> Ativar Trilha Sonora';
-            }
+            if (musica.paused) { musica.play(); btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar Trilha'; }
+            else { musica.pause(); btnM.innerHTML = '<i class="fas fa-play"></i> Ativar Trilha Sonora'; }
         });
 
-        // Lógica da Contagem e Barra
         function update() {
             const final = new Date(2026, 8, 8, 0, 0, 0).getTime();
             const inicio = new Date(2024, 0, 1).getTime();
@@ -264,6 +252,9 @@
         }
         setInterval(update, 1000);
         update();
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
