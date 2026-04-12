@@ -200,17 +200,6 @@
             color: white; 
         }
 
-        .btn-share { 
-            background: #25D366; 
-            color: white; 
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
-        }
-
-        .btn-share:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(37, 211, 102, 0.3);
-        }
-
         @media (max-width: 600px) {
             .timer-grid { grid-template-columns: repeat(2, 1fr); }
             .main-container { padding: 40px 20px; }
@@ -269,9 +258,6 @@
             <button class="btn btn-audio" id="btnPlay">
                 <i class="fas fa-play"></i> Trilha Sonora
             </button>
-            <a href="#" class="btn btn-share" id="waShare" target="_blank">
-                <i class="fab fa-whatsapp"></i> Compartilhar
-            </a>
         </div>
     </div>
 
@@ -326,9 +312,6 @@
 
             document.getElementById('bar').style.width = perc.toFixed(2) + "%";
             document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
-
-            const shareText = `Faltam ${dias} dias para o curso da PC-RR! 🚔💀`;
-            document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
         }
 
         setInterval(engine, 1000);
