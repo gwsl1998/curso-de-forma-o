@@ -2,11 +2,10 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="color-scheme" content="dark">
     <title>PCRR - Contagem Regressiva</title>
     
-    <!-- Fontes: Montserrat e Orbitron para o botão -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -27,122 +26,115 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 99999; transition: opacity 0.8s ease, visibility 0.8s;
         }
-        .splash-logo { width: 120px; margin-bottom: 20px; animation: heartbeat 1.5s ease-in-out infinite; }
-        .splash-text { color: white; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; opacity: 0.7; }
+        .splash-logo { width: 100px; margin-bottom: 20px; animation: heartbeat 1.5s ease-in-out infinite; }
+        .splash-text { color: white; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; opacity: 0.7; }
         @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.5)); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.5)); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(184, 134, 11, 0.4)); }
         }
         .hidden-splash { opacity: 0; visibility: hidden; }
 
-        /* --- MODO HUD (OPERAÇÕES NOTURNAS) --- */
+        /* --- MODO HUD MOBILE (OPERAÇÕES NOTURNAS) --- */
+        /* Camada 1: Vinheta (Bordas escuras) */
         .hud-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
+            /* Ajustado para mobile: o centro fica bem limpo para o contador */
+            background: radial-gradient(circle, transparent 30%, rgba(0, 0, 0, 0.85) 100%);
             pointer-events: none;
-            z-index: 9998;
+            z-index: 9990;
             opacity: 0;
             transition: opacity 1s ease;
         }
 
+        /* Camada 2: Linhas de Monitor (Scanlines) */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
-            background-size: 100% 4px;
-            z-index: 9997;
+            /* Linhas levemente mais espaçadas para aparecerem bem no celular */
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 6px;
+            z-index: 9991;
             pointer-events: none;
             opacity: 0;
         }
 
-        /* Ativação do Modo HUD */
         body.music-on .hud-overlay, 
         body.music-on .scanlines { opacity: 1; }
 
         /* --- ESTILOS GERAIS --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--dark-base) !important;
-            background-image: linear-gradient(rgba(0, 45, 91, 0.9), rgba(10, 14, 20, 0.95)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png') !important;
-            background-attachment: fixed; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: #333; overflow-x: hidden;
+            background-color: var(--dark-base);
+            background-image: linear-gradient(rgba(0, 45, 91, 0.92), rgba(10, 14, 20, 0.96)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            background-attachment: fixed; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; color: #333; overflow-x: hidden;
         }
 
         .main-container {
-            background: var(--glass); width: 100%; max-width: 650px;
-            padding: 40px 30px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.2); text-align: center; position: relative; overflow: hidden; z-index: 10;
-            transition: transform 0.5s ease;
+            background: var(--glass); width: 100%; max-width: 500px;
+            padding: 35px 20px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2); text-align: center; position: relative; z-index: 10;
         }
 
-        .main-container::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy)); }
+        .main-container::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy)); border-radius: 25px 25px 0 0; }
 
-        .brasao { width: 90px; margin-bottom: 15px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); }
-        .subtitulo { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 5px; font-weight: 600; color: #718096; margin-bottom: 10px; }
+        .brasao { width: 80px; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+        .subtitulo { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 4px; font-weight: 600; color: #718096; margin-bottom: 15px; }
 
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 30px; }
-        .timer-box { background: #fff; padding: 20px 10px; border-radius: 18px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        .number { font-size: 2.5rem; font-weight: 900; color: var(--navy); display: block; line-height: 1; }
+        /* GRID ADAPTADA PARA TOQUE E VISUALIZAÇÃO MOBILE */
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 25px; }
+        .timer-box { background: #fff; padding: 15px 5px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 5px 10px rgba(0,0,0,0.03); }
+        .number { font-size: 1.8rem; font-weight: 900; color: var(--navy); display: block; line-height: 1.1; }
         .timer-box.segundos .number { color: var(--red); animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); } }
-        .label { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: #888; margin-top: 8px; display: block; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .label { font-size: 0.55rem; text-transform: uppercase; font-weight: 700; color: #999; margin-top: 5px; display: block; }
 
-        .progress-container { margin-bottom: 25px; background: #fff; padding: 20px; border-radius: 20px; }
-        .track { width: 100%; height: 14px; background: #e9ecef; border-radius: 10px; overflow: hidden; position: relative; }
-        .fill { height: 100%; width: 0%; background: var(--navy); position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1), background 2s ease; box-shadow: 0 0 15px rgba(0, 45, 91, 0.4); }
-        .fill::after { content: ""; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: sweep 3s infinite; }
-        @keyframes sweep { 0% { left: -100%; } 100% { left: 150%; } }
+        .progress-container { margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 15px; }
+        .track { width: 100%; height: 12px; background: #e9ecef; border-radius: 10px; overflow: hidden; position: relative; }
+        .fill { height: 100%; width: 0%; background: var(--navy); transition: width 1s ease-in-out; }
 
-        .foto-je { height: 220px; width: auto; max-width: 100%; display: block; margin: 0 auto; position: relative; z-index: 2; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
-        .shadow-je { width: 120px; height: 12px; background: rgba(0,0,0,0.15); margin: -10px auto 20px auto; border-radius: 50%; filter: blur(6px); animation: pulse-shadow 2s ease-in-out infinite; }
+        .foto-je { height: 180px; width: auto; display: block; margin: 0 auto; position: relative; z-index: 2; object-fit: contain; }
+        .shadow-je { width: 100px; height: 10px; background: rgba(0,0,0,0.12); margin: -8px auto 15px auto; border-radius: 50%; filter: blur(4px); animation: pulse-shadow 2s infinite; }
         @keyframes pulse-shadow { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.3); opacity: 0.5; } }
 
-        .frase-final { font-size: 1.4rem; font-weight: 900; color: var(--navy); text-transform: uppercase; margin-bottom: 20px; line-height: 1.2; }
+        .frase-final { font-size: 1.1rem; font-weight: 900; color: var(--navy); text-transform: uppercase; margin-bottom: 20px; line-height: 1.3; padding: 0 10px; }
 
-        .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        
-        /* BOTÃO PREMIUM ORBITRON */
+        /* BOTÃO MOBILE PREMIUM */
         .btn-audio { 
-            padding: 15px 25px; border-radius: 50px; font-weight: 700; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s; text-transform: uppercase; 
-            background: white; color: var(--navy); border: 2px solid var(--navy); font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+            width: 100%; padding: 18px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: 0.2s; text-transform: uppercase; 
+            background: white; color: var(--navy); border: 2px solid var(--navy); font-family: 'Orbitron', sans-serif; 
         }
-        .btn-audio:hover { background: var(--navy); color: white; }
+        .btn-audio:active { transform: scale(0.96); background: var(--navy); color: white; }
 
         .terminal-container {
-            background: #050a0f; color: #00ff41; font-family: 'Courier New', Courier, monospace; font-size: 0.75rem; padding: 12px; border-radius: 10px; margin-top: 20px; text-align: left; min-height: 45px; border: 1px solid #1a2a3a; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); display: flex; align-items: center;
+            background: #050a0f; color: #00ff41; font-family: 'Courier New', Courier, monospace; font-size: 0.75rem; padding: 12px; border-radius: 10px; margin-top: 20px; text-align: left; min-height: 50px; border: 1px solid #1a2a3a; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); display: flex; align-items: center;
         }
         .terminal-prefix { color: #888; margin-right: 5px; }
         .cursor { display: inline-block; width: 8px; height: 15px; background: #00ff41; margin-left: 5px; animation: blink 0.8s infinite; vertical-align: middle; }
 
-        @media (max-width: 600px) {
-            .timer-grid { grid-template-columns: repeat(2, 1fr); }
-            .foto-je { height: 160px; }
-            .frase-final { font-size: 1.1rem; }
-            .btn-group { flex-direction: column; }
-            .btn-audio { width: 100%; justify-content: center; }
+        @media (max-width: 380px) {
+            .number { font-size: 1.5rem; }
+            .timer-grid { gap: 5px; }
         }
     </style>
 </head>
 <body id="corpo">
 
-    <!-- CAMADAS DO MODO HUD -->
+    <!-- CAMADAS HUD -->
     <div class="hud-overlay"></div>
     <div class="scanlines"></div>
 
     <div id="splash-screen">
-        <img src="brasao_pcrr.png" alt="Carregando..." class="splash-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
-        <div class="splash-text">Sincronizando HUD...</div>
+        <img src="brasao_pcrr.png" alt="PCRR" class="splash-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
+        <div class="splash-text">Sincronizando Sistema Mobile...</div>
     </div>
 
-    <div class="modal-overlay" id="modalAlerta">
-        <div class="modal-box">
-            <h2>DECORE A CANÇÃO, ALUNO!</h2>
-            <button onclick="document.getElementById('modalAlerta').style.display='none'; localStorage.setItem('alertaPcrrExibido','true'); vibrar();" style="background:var(--navy); color:white; padding:12px 30px; border-radius:50px; border:none; font-weight:800; cursor:pointer; text-transform:uppercase;">ENTENDIDO!</button>
+    <div class="modal-overlay" id="modalAlerta" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; display:none; justify-content:center; align-items:center; backdrop-filter:blur(8px);">
+        <div class="modal-box" style="background:white; padding:35px 25px; border-radius:25px; text-align:center; width:85%; border-top:8px solid var(--navy);">
+            <h2 style="font-size:1.2rem; margin-bottom:15px; color:var(--navy);">DECORE A CANÇÃO, ALUNO!</h2>
+            <button onclick="document.getElementById('modalAlerta').style.display='none'; localStorage.setItem('alertaPcrrExibido','true'); vibrar();" style="background:var(--navy); color:white; padding:15px 30px; border-radius:50px; border:none; font-weight:800; text-transform:uppercase; font-size:0.8rem;">ENTENDIDO!</button>
         </div>
     </div>
 
@@ -161,10 +153,10 @@
             <div class="timer-box segundos"><span class="number" id="s">00</span><span class="label">Segundos</span></div>
         </section>
 
-        <h1 class="frase-final">Para o início do Curso de Formação da PC-RR</h1>
+        <h1 class="frase-final">Início do Curso de Formação PC-RR</h1>
 
         <section class="progress-container">
-            <div class="progress-header" style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:800; color:var(--navy); margin-bottom:10px; text-transform:uppercase;">
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:800; color:var(--navy); margin-bottom:8px; text-transform:uppercase;">
                 <span>Esperômetro</span>
                 <span id="percent-text">0%</span>
             </div>
@@ -196,13 +188,12 @@
             }, 2500);
         };
 
-        // --- LÓGICA DO TERMINAL ---
         const frasesMotivacionais = [
             "A vitória ama a preparação.",
             "Onde o corpo cansa, a mente descansa.",
             "O distintivo não se compra, se conquista.",
             "Padrão e disciplina sempre.",
-            "Mantenha o foco na missão."
+            "Treine enquanto eles dormem."
         ];
 
         const diaDoAno = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
@@ -214,17 +205,14 @@
             "[MISSAO]: " + fraseDoDia
         ];
 
-        let stringIdx = 0, charIdx = 0;
-        let isMusicPlaying = false; // Controle da música
+        let stringIdx = 0, charIdx = 0, isMusicPlaying = false;
         const terminalEl = document.getElementById('terminal-text');
 
         function typeTerminal() {
-            // Se a música estiver tocando, trava na mensagem da canção
             if (isMusicPlaying) {
                 terminalEl.textContent = "Decore a canção, aluno!";
                 return; 
             }
-
             if (charIdx < terminalStringsPadrao[stringIdx].length) {
                 terminalEl.textContent += terminalStringsPadrao[stringIdx].charAt(charIdx);
                 charIdx++;
@@ -235,8 +223,7 @@
         }
 
         function eraseTerminal() {
-            if (isMusicPlaying) return; // Não apaga se a música estiver tocando
-
+            if (isMusicPlaying) return;
             if (charIdx > 0) {
                 terminalEl.textContent = terminalStringsPadrao[stringIdx].substring(0, charIdx - 1);
                 charIdx--;
@@ -249,7 +236,6 @@
 
         function startTerminal() { typeTerminal(); }
 
-        // --- CONTROLE DE ÁUDIO E HUD ---
         const audio = document.getElementById('musica');
         const btnM = document.getElementById('btnPlay');
         const corpo = document.getElementById('corpo');
@@ -257,50 +243,41 @@
         btnM.addEventListener('click', () => {
             vibrar();
             if (audio.paused) {
-                audio.play();
+                audio.play().catch(e => console.log("Erro áudio"));
                 isMusicPlaying = true;
                 btnM.innerHTML = '<i class="fas fa-volume-xmark"></i> PAUSAR CANÇÃO';
-                corpo.classList.add('music-on'); // Ativa o HUD
-                terminalEl.textContent = "Decore a canção, aluno!"; // Muda terminal na hora
+                corpo.classList.add('music-on');
+                terminalEl.textContent = "Decore a canção, aluno!";
             } else {
                 audio.pause();
                 isMusicPlaying = false;
                 btnM.innerHTML = '<i class="fas fa-volume-high"></i> CANÇÃO DO CR';
-                corpo.classList.remove('music-on'); // Desativa o HUD
-                charIdx = 0; // Reseta o terminal para voltar ao ciclo
+                corpo.classList.remove('music-on');
+                charIdx = 0;
                 typeTerminal(); 
             }
         });
 
-        // --- ENGINE DO TIMER ---
         const DATA_OBJETIVO = new Date(2026, 8, 8, 0, 0, 0).getTime();
         const DATA_INICIAL = new Date(2026, 2, 1, 0, 0, 0).getTime(); 
 
         function engine() {
             const agora = new Date().getTime();
             const diff = DATA_OBJETIVO - agora;
-
-            if (diff <= 0) {
-                document.querySelector('.main-container').innerHTML = `<h1>CHEGOU A HORA! 👮‍♂️</h1>`;
-                return;
-            }
+            if (diff <= 0) { document.querySelector('.main-container').innerHTML = `<h1>MISSÃO INICIADA! 👮‍♂️</h1>`; return; }
 
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
             document.getElementById('d').innerText = d.toString().padStart(2, '0');
             document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
             document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
             document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-            document.title = d + " Dias - PCRR";
-
+            
             const total = DATA_OBJETIVO - DATA_INICIAL;
             const decorrido = agora - DATA_INICIAL;
             let perc = Math.min(Math.max((decorrido / total) * 100, 0), 100);
-
-            const bar = document.getElementById('bar');
-            bar.style.width = perc.toFixed(2) + "%";
+            document.getElementById('bar').style.width = perc.toFixed(2) + "%";
             document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
         }
-
         setInterval(engine, 1000);
         engine();
     </script>
