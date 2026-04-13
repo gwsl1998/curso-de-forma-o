@@ -310,7 +310,8 @@
     <div class="modal-overlay" id="modalAlerta">
         <div class="modal-box">
             <h2>DECORE A CANÇÃO, ALUNO!</h2>
-            <button class="btn-modal" onclick="fecharAlerta()">ENTENDIDO!</button>
+            <!-- Feedback tátil adicionado no clique -->
+            <button class="btn-modal" onclick="fecharAlerta(); vibrar();">ENTENDIDO!</button>
         </div>
     </div>
 
@@ -372,6 +373,13 @@
     </div>
 
     <script>
+        // Função de vibração (Haptic Feedback)
+        function vibrar() {
+            if (navigator.vibrate) {
+                navigator.vibrate(40); // Vibra por 40 milissegundos
+            }
+        }
+
         window.onload = function() {
             if (!localStorage.getItem('alertaPcrrExibido')) {
                 document.getElementById('modalAlerta').style.display = 'flex';
@@ -425,6 +433,7 @@
         const btnM = document.getElementById('btnPlay');
 
         btnM.addEventListener('click', () => {
+            vibrar(); // Adicionado vibração ao clicar no botão de áudio
             if (audio.paused) {
                 audio.play().catch(e => alert("Clique na tela primeiro!"));
                 btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar canção';
@@ -442,13 +451,23 @@
 
             if (diff <= 0) {
                 document.querySelector('.main-container').innerHTML = `<h1>CHEGOU A HORA! 👮‍♂️</h1>`;
+                document.title = "CHEGOU A HORA! 👮‍♂️";
                 return;
             }
 
-            document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-            document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-            document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-            document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('d').innerText = dias.toString().padStart(2, '0');
+            document.getElementById('h').innerText = horas.toString().padStart(2, '0');
+            document.getElementById('m').innerText = minutos.toString().padStart(2, '0');
+            document.getElementById('s').innerText = segundos.toString().padStart(2, '0');
+
+            // --- TÍTULO DINÂMICO ---
+            // Atualiza o título da aba do navegador com os dias restantes
+            document.title = dias + " Dias - PCRR";
 
             const total = DATA_OBJETIVO - DATA_INICIAL;
             const decorrido = agora - DATA_INICIAL;
@@ -458,7 +477,6 @@
             bar.style.width = perc.toFixed(2) + "%";
             document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
 
-            // Lógica de cor dinâmica: Muda para dourado conforme o progresso
             if(perc > 80) {
                 bar.style.background = "linear-gradient(90deg, #B8860B, #FFD700)";
                 bar.style.boxShadow = "0 0 20px rgba(184, 134, 11, 0.6)";
