@@ -35,6 +35,32 @@
             align-items: center;
             padding: 20px;
             color: #333;
+            overflow-x: hidden;
+        }
+
+        /* --- EFEITO RADAR (SCANLINE) --- */
+        .radar-sweep {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(0, 123, 255, 0.05) 50%,
+                rgba(0, 255, 255, 0.15) 95%,
+                rgba(0, 255, 255, 0.4) 100%
+            );
+            z-index: 9999;
+            pointer-events: none; /* Não interfere nos cliques */
+            animation: radar-move 4s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes radar-move {
+            0% { transform: translateY(-100px); }
+            100% { transform: translateY(110vh); }
         }
 
         /* --- ESTILO DO ALERTA PERSONALIZADO --- */
@@ -99,6 +125,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
 
         .main-container::before {
@@ -209,7 +236,6 @@
             transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- CONFIGURAÇÃO DO GIF DINÂMICO --- */
         .foto-je {
             height: 220px; 
             width: auto;
@@ -256,6 +282,9 @@
     </style>
 </head>
 <body>
+
+    <!-- EFEITO RADAR -->
+    <div class="radar-sweep"></div>
 
     <!-- MODAL DE ALERTA -->
     <div class="modal-overlay" id="modalAlerta">
@@ -306,7 +335,6 @@
             </div>
         </section>
 
-        <!-- IMAGEM TROCADA PARA GIF -->
         <img src="JE.gif" alt="Personagem JE" class="foto-je">
 
         <div class="btn-group">
