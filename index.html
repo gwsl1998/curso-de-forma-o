@@ -209,7 +209,7 @@
             transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- ANIMAÇÃO DE SALTO ÚNICO --- */
+        /* --- CONFIGURAÇÃO DO GIF DINÂMICO --- */
         .foto-je {
             height: 220px; 
             width: auto;
@@ -218,13 +218,6 @@
             margin: 0 auto 20px auto;
             object-fit: contain;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
-            animation: pulo-suave 5s ease-in-out infinite;
-        }
-
-        @keyframes pulo-suave {
-            0%, 80%, 100% { transform: translateY(0); } 
-            85% { transform: translateY(-30px); } 
-            90% { transform: translateY(0); }
         }
 
         .btn-group {
@@ -313,7 +306,8 @@
             </div>
         </section>
 
-        <img src="JE.png" alt="Personagem JE" class="foto-je">
+        <!-- IMAGEM TROCADA PARA GIF -->
+        <img src="JE.gif" alt="Personagem JE" class="foto-je">
 
         <div class="btn-group">
             <button class="btn btn-audio" id="btnPlay">
