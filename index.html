@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Biblioteca necessária para o Print (HTML2CANVAS) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <style>
         :root {
             --navy: #002D5B; 
@@ -21,96 +18,324 @@
             --glass: rgba(255, 255, 255, 0.95);
         }
 
-        /* --- TELA DE SPLASH --- */
+        /* --- ESTILOS DO SPLASH SCREEN --- */
         #splash-screen {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-color: var(--dark-base);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 99999; transition: opacity 0.8s ease, visibility 0.8s;
-        }
-        .splash-logo { width: 120px; margin-bottom: 20px; animation: heartbeat 1.5s ease-in-out infinite; }
-        .splash-text { color: white; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; opacity: 0.7; }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.1); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        .hidden-splash { opacity: 0; visibility: hidden; }
-
-        /* --- BOTÃO FLUTUANTE DE PRINT --- */
-        .btn-float-print {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: var(--navy);
-            color: white;
-            border-radius: 50%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            z-index: 1000;
-            cursor: pointer;
-            border: 2px solid var(--gold);
-            transition: 0.3s;
+            z-index: 99999; /* Fica acima de tudo */
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
-        .btn-float-print:active { transform: scale(0.9); }
 
-        /* --- ESTILOS GERAIS --- */
+        .splash-logo {
+            width: 120px;
+            margin-bottom: 20px;
+            /* Animação de Batimento Cardíaco */
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .splash-text {
+            color: white;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0.7;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(184, 134, 11, 0)); }
+            15% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.5)); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.5)); }
+            100% { transform: scale(1); }
+        }
+
+        /* Classe para esconder o splash */
+        .hidden-splash {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- RESTANTE DO SEU CÓDIGO --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--dark-base) !important;
-            background-image: linear-gradient(rgba(0, 45, 91, 0.9), rgba(10, 14, 20, 0.95)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png') !important;
-            background-attachment: fixed; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: #333; overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 45, 91, 0.9), rgba(10, 14, 20, 0.95)),
+                url('https://www.transparenttextures.com/patterns/carbon-fibre.png') !important;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .terminal-container {
+            background: #050a0f;
+            color: #00ff41; 
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            min-height: 45px;
+            border: 1px solid #1a2a3a;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-prefix { color: #888; margin-right: 5px; }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: #00ff41;
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-box {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border-top: 10px solid var(--navy);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .btn-modal {
+            background: var(--navy);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
         }
 
         .main-container {
-            background: var(--glass); width: 100%; max-width: 650px; padding: 40px 30px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); text-align: center; position: relative; overflow: hidden; z-index: 10;
+            background: var(--glass);
+            width: 100%;
+            max-width: 650px;
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
         }
 
-        /* --- ÁREA QUE SERÁ CAPTURADA --- */
-        #area-print {
-            background: white; /* Garante fundo branco na foto */
+        .main-container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+        }
+
+        .brasao {
+            width: 90px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+        }
+
+        .subtitulo {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-weight: 600;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .timer-box {
+            background: #fff;
+            padding: 20px 10px;
+            border-radius: 18px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--navy);
+            display: block;
+            line-height: 1;
+        }
+
+        .timer-box.segundos .number {
+            color: var(--red);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); }
+        }
+
+        .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #888;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .progress-container {
+            margin-bottom: 25px;
+            background: #fff;
             padding: 20px;
             border-radius: 20px;
         }
 
-        .main-container::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy)); }
+        .track {
+            width: 100%;
+            height: 14px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
 
-        .brasao { width: 90px; margin-bottom: 15px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2)); }
-        .subtitulo { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 5px; font-weight: 600; color: #718096; margin-bottom: 10px; }
+        .fill {
+            height: 100%;
+            width: 0%; 
+            background: var(--navy);
+            position: relative;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1), background 2s ease;
+            box-shadow: 0 0 15px rgba(0, 45, 91, 0.4);
+        }
 
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 30px; }
-        .timer-box { background: #fff; padding: 20px 10px; border-radius: 18px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        .number { font-size: 2.5rem; font-weight: 900; color: var(--navy); display: block; line-height: 1; }
-        .timer-box.segundos .number { color: var(--red); animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); } }
-        .label { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: #888; margin-top: 8px; display: block; }
+        .fill::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: sweep 3s infinite;
+        }
 
-        .progress-container { margin-bottom: 25px; background: #fff; padding: 20px; border-radius: 20px; }
-        .track { width: 100%; height: 14px; background: #e9ecef; border-radius: 10px; overflow: hidden; position: relative; }
-        .fill { height: 100%; width: 0%; background: var(--navy); position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px rgba(0, 45, 91, 0.4); }
-        .frase-final { font-size: 1.4rem; font-weight: 900; color: var(--navy); text-transform: uppercase; margin-bottom: 20px; line-height: 1.2; }
+        @keyframes sweep {
+            0% { left: -100%; }
+            100% { left: 150%; }
+        }
 
-        /* --- ELEMENTOS FORA DO PRINT --- */
-        .foto-je { height: 220px; width: auto; max-width: 100%; display: block; margin: 20px auto 0 auto; position: relative; z-index: 2; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
-        .shadow-je { width: 120px; height: 12px; background: rgba(0,0,0,0.15); margin: -10px auto 20px auto; border-radius: 50%; filter: blur(6px); animation: pulse-shadow 2s ease-in-out infinite; }
-        @keyframes pulse-shadow { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.3); opacity: 0.5; } }
+        .foto-je {
+            height: 220px; 
+            width: auto;
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
 
-        .terminal-container { background: #050a0f; color: #00ff41; font-family: 'Courier New', monospace; font-size: 0.75rem; padding: 12px; border-radius: 10px; margin-top: 20px; text-align: left; min-height: 45px; border: 1px solid #1a2a3a; display: flex; align-items: center; }
-        .terminal-prefix { color: #888; margin-right: 5px; }
-        .cursor { display: inline-block; width: 8px; height: 15px; background: #00ff41; margin-left: 5px; animation: blink 0.8s infinite; vertical-align: middle; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .shadow-je {
+            width: 120px;
+            height: 12px;
+            background: rgba(0,0,0,0.15);
+            margin: -10px auto 20px auto;
+            border-radius: 50%;
+            filter: blur(6px);
+            animation: pulse-shadow 2s ease-in-out infinite;
+        }
 
-        .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .btn { padding: 15px 25px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; transition: 0.3s; text-transform: uppercase; border: none; }
+        @keyframes pulse-shadow {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.3); opacity: 0.5; }
+        }
+
+        .frase-final {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--navy);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            border: none;
+        }
+
         .btn-audio { background: white; color: var(--navy); border: 2px solid var(--navy); }
+        .btn-audio:hover { background: var(--navy); color: white; }
 
         @media (max-width: 600px) {
             .timer-grid { grid-template-columns: repeat(2, 1fr); }
@@ -123,14 +348,10 @@
 </head>
 <body>
 
+    <!-- TELA DE SPLASH (ADICIONADA) -->
     <div id="splash-screen">
         <img src="brasao_pcrr.png" alt="Carregando..." class="splash-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
-        <div class="splash-text">Aguarde, Recruta...</div>
-    </div>
-
-    <!-- BOTÃO FLUTUANTE -->
-    <div class="btn-float-print" onclick="gerarStatus()" id="btnSnapshot">
-        <i class="fas fa-camera"></i>
+        <div class="splash-text">Carregando Sistema...</div>
     </div>
 
     <div class="modal-overlay" id="modalAlerta">
@@ -140,59 +361,82 @@
         </div>
     </div>
 
-    <audio id="musica" loop><source src="musica.mp3" type="audio/mpeg"></audio>
+    <audio id="musica" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="main-container">
-        
-        <!-- DIV DE CAPTURA (Contém Brasão, Timer e Progresso - SEM JE) -->
-        <div id="area-print">
-            <header>
-                <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
-                <h2 class="subtitulo">Faltam apenas</h2>
-            </header>
+        <header>
+            <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
+            <h2 class="subtitulo">Faltam apenas</h2>
+        </header>
 
-            <section class="timer-grid">
-                <div class="timer-box"><span class="number" id="d">00</span><span class="label">Dias</span></div>
-                <div class="timer-box"><span class="number" id="h">00</span><span class="label">Horas</span></div>
-                <div class="timer-box"><span class="number" id="m">00</span><span class="label">Minutos</span></div>
-                <div class="timer-box segundos"><span class="number" id="s">00</span><span class="label">Segundos</span></div>
-            </section>
+        <section class="timer-grid">
+            <div class="timer-box">
+                <span class="number" id="d">00</span>
+                <span class="label">Dias</span>
+            </div>
+            <div class="timer-box">
+                <span class="number" id="h">00</span>
+                <span class="label">Horas</span>
+            </div>
+            <div class="timer-box">
+                <span class="number" id="m">00</span>
+                <span class="label">Minutos</span>
+            </div>
+            <div class="timer-box segundos">
+                <span class="number" id="s">00</span>
+                <span class="label">Segundos</span>
+            </div>
+        </section>
 
-            <h1 class="frase-final">Para o início do Curso de Formação da PC-RR</h1>
+        <h1 class="frase-final">Para o início do Curso de Formação da PC-RR</h1>
 
-            <section class="progress-container">
-                <div class="progress-header" style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:800; color:var(--navy); margin-bottom:10px; text-transform:uppercase;">
-                    <span>Esperômetro</span>
-                    <span id="percent-text">0%</span>
-                </div>
-                <div class="track"><div class="fill" id="bar"></div></div>
-            </section>
-        </div>
+        <section class="progress-container">
+            <div class="progress-header" style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:800; color:var(--navy); margin-bottom:10px; text-transform:uppercase;">
+                <span>Esperômetro</span>
+                <span id="percent-text">0%</span>
+            </div>
+            <div class="track">
+                <div class="fill" id="bar"></div>
+            </div>
+        </section>
 
-        <!-- FORA DA ÁREA DE PRINT -->
         <img src="JE.gif" alt="Personagem JE" class="foto-je">
         <div class="shadow-je"></div>
 
         <div class="btn-group">
-            <button class="btn btn-audio" id="btnPlay"><i class="fas fa-play"></i> Canção do CR</button>
+            <button class="btn btn-audio" id="btnPlay">
+                <i class="fas fa-play"></i> Canção do CR
+            </button>
         </div>
 
         <div class="terminal-container">
-            <span class="terminal-prefix">></span><span id="terminal-text"></span><span class="cursor"></span>
+            <span class="terminal-prefix">></span>
+            <span id="terminal-text"></span>
+            <span class="cursor"></span>
         </div>
     </div>
 
     <script>
-        function vibrar() { if (navigator.vibrate) navigator.vibrate(40); }
+        function vibrar() {
+            if (navigator.vibrate) {
+                navigator.vibrate(40);
+            }
+        }
 
         window.onload = function() {
-            setTimeout(() => {
-                document.getElementById('splash-screen').classList.add('hidden-splash');
+            // Lógica para esconder o Splash Screen após carregar
+            setTimeout(function() {
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('hidden-splash');
+                
+                // Modal de Alerta original
                 if (!localStorage.getItem('alertaPcrrExibido')) {
                     document.getElementById('modalAlerta').style.display = 'flex';
                 }
                 startTerminal();
-            }, 2500);
+            }, 2500); // Exibe por 2.5 segundos para dar o efeito de "App"
         };
 
         function fecharAlerta() {
@@ -200,67 +444,38 @@
             localStorage.setItem('alertaPcrrExibido', 'true');
         }
 
-        // --- FUNÇÃO PARA GERAR O PRINT E COMPARTILHAR ---
-        async function gerarStatus() {
-            vibrar();
-            const btn = document.getElementById('btnSnapshot');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Efeito de carregando
-            
-            const area = document.getElementById('area-print');
-            
-            // html2canvas transforma a div em uma imagem
-            html2canvas(area, {
-                backgroundColor: "#ffffff",
-                scale: 2, // Aumenta a qualidade da foto
-                logging: false,
-                useCORS: true 
-            }).then(async (canvas) => {
-                const image = canvas.toDataURL("image/png");
-                
-                // Transforma o link da imagem em um arquivo real para o celular entender
-                const blob = await (await fetch(image)).blob();
-                const file = new File([blob], 'pcrr-contagem.png', { type: 'image/png' });
+        const terminalStrings = [
+            "[SISTEMA]: Analisando tempo restante...",
+            "[UNIDADE]: Aluno Bisonho em prontidão...",
+            "[INFO]: Curso de Formação PCRR - Carregando...",
+            "[STATUS]: Vigilância constante.",
+            "[LOG]: Sincronizando com o Diário Oficial..."
+        ];
 
-                // Tenta compartilhar nativamente (WhatsApp/Instagram/Galeria)
-                if (navigator.share) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: 'Status PCRR',
-                            text: 'A contagem regressiva continua! 👮‍♂️🔥'
-                        });
-                    } catch (err) {
-                        console.log("Compartilhamento cancelado");
-                    }
-                } else {
-                    // Fallback para PC: Apenas baixa a imagem
-                    const link = document.createElement('a');
-                    link.download = 'pcrr-status.png';
-                    link.href = image;
-                    link.click();
-                    alert("Imagem gerada! No computador, o download foi iniciado.");
-                }
-                
-                btn.innerHTML = '<i class="fas fa-camera"></i>';
-            });
-        }
-
-        const terminalStrings = ["[SISTEMA]: Analisando tempo restante...", "[UNIDADE]: Aluno Bisonho em prontidão...", "[INFO]: Curso de Formação PCRR...", "[STATUS]: Vigilância constante."];
-        let sIdx = 0, charIdx = 0;
+        let stringIdx = 0, charIdx = 0;
         const terminalEl = document.getElementById('terminal-text');
 
         function typeTerminal() {
-            if (charIdx < terminalStrings[sIdx].length) {
-                terminalEl.textContent += terminalStrings[sIdx].charAt(charIdx);
-                charIdx++; setTimeout(typeTerminal, 50);
-            } else { setTimeout(eraseTerminal, 3000); }
+            if (charIdx < terminalStrings[stringIdx].length) {
+                terminalEl.textContent += terminalStrings[stringIdx].charAt(charIdx);
+                charIdx++;
+                setTimeout(typeTerminal, 50);
+            } else {
+                setTimeout(eraseTerminal, 3000);
+            }
         }
+
         function eraseTerminal() {
             if (charIdx > 0) {
-                terminalEl.textContent = terminalStrings[sIdx].substring(0, charIdx - 1);
-                charIdx--; setTimeout(eraseTerminal, 20);
-            } else { sIdx = (sIdx + 1) % terminalStrings.length; setTimeout(typeTerminal, 500); }
+                terminalEl.textContent = terminalStrings[stringIdx].substring(0, charIdx - 1);
+                charIdx--;
+                setTimeout(eraseTerminal, 20);
+            } else {
+                stringIdx = (stringIdx + 1) % terminalStrings.length;
+                setTimeout(typeTerminal, 500);
+            }
         }
+
         function startTerminal() { typeTerminal(); }
 
         const DATA_OBJETIVO = new Date(2026, 8, 8, 0, 0, 0).getTime();
@@ -268,10 +483,11 @@
 
         const audio = document.getElementById('musica');
         const btnM = document.getElementById('btnPlay');
+
         btnM.addEventListener('click', () => {
             vibrar();
             if (audio.paused) {
-                audio.play();
+                audio.play().catch(e => alert("Clique na tela primeiro!"));
                 btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar canção';
                 btnM.style.background = "#002D5B"; btnM.style.color = "white";
             } else {
@@ -284,14 +500,20 @@
         function engine() {
             const agora = new Date().getTime();
             const diff = DATA_OBJETIVO - agora;
-            if (diff <= 0) { document.querySelector('.main-container').innerHTML = `<h1>CHEGOU A HORA! 👮‍♂️</h1>`; return; }
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('d').innerText = d.toString().padStart(2, '0');
+            if (diff <= 0) {
+                document.querySelector('.main-container').innerHTML = `<h1>CHEGOU A HORA! 👮‍♂️</h1>`;
+                document.title = "CHEGOU A HORA! 👮‍♂️";
+                return;
+            }
+
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('d').innerText = dias.toString().padStart(2, '0');
             document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
             document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
             document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-            document.title = d + " Dias - PCRR";
+
+            document.title = dias + " Dias - PCRR";
 
             const total = DATA_OBJETIVO - DATA_INICIAL;
             const decorrido = agora - DATA_INICIAL;
@@ -300,7 +522,15 @@
             const bar = document.getElementById('bar');
             bar.style.width = perc.toFixed(2) + "%";
             document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
+
+            if(perc > 80) {
+                bar.style.background = "linear-gradient(90deg, #B8860B, #FFD700)";
+                bar.style.boxShadow = "0 0 20px rgba(184, 134, 11, 0.6)";
+            } else if (perc > 50) {
+                bar.style.background = "linear-gradient(90deg, #002D5B, #B8860B)";
+            }
         }
+
         setInterval(engine, 1000);
         engine();
     </script>
