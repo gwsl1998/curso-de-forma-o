@@ -16,6 +16,8 @@
             --red: #C0392B;   
             --dark-base: #0a0e14;
             --glass: rgba(255, 255, 255, 0.95);
+            --police-blue: rgba(0, 45, 255, 0.6);
+            --police-red: rgba(255, 0, 0, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -115,31 +117,61 @@
         .track { width: 100%; height: 14px; background: #e9ecef; border-radius: 10px; overflow: hidden; position: relative; }
         .fill { height: 100%; width: 0%; background: var(--navy); transition: width 1s ease-in-out; }
 
-        /* --- ESTILIZAÇÃO DO PERSONAGEM (GIF/ESTÁTICO) --- */
+        /* --- CONTAINER DO PERSONAGEM & GIROFLEX --- */
         .character-wrapper {
             position: relative;
             height: 200px;
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-bottom: 0px;
+            align-items: center;
+            margin-bottom: 10px;
         }
+
+        /* Luzes do Giroflex */
+        .giroflex {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+        }
+        .light {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            filter: blur(35px);
+        }
+        .light-blue { background: var(--police-blue); animation: strobe 0.4s infinite alternate; }
+        .light-red { background: var(--police-red); animation: strobe 0.4s infinite alternate-reverse; }
+
+        @keyframes strobe {
+            from { opacity: 0.1; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1.2); }
+        }
+
         .foto-je { 
             height: 200px; 
             width: auto; 
             position: absolute; 
             z-index: 2; 
             object-fit: contain; 
-            transition: opacity 0.5s ease-in-out; /* Transição suave de meio segundo */
+            transition: opacity 0.5s ease-in-out; 
         }
-        .gif-img { opacity: 0; } /* GIF começa invisível */
-        .static-img { opacity: 1; } /* Imagem estática começa visível */
+        .gif-img { opacity: 0; }
+        .static-img { opacity: 1; }
 
-        /* Quando a classe 'playing' for adicionada ao container */
+        /* Estado Ativo (quando a música toca) */
+        .character-wrapper.playing .giroflex { opacity: 1; }
         .character-wrapper.playing .gif-img { opacity: 1; }
         .character-wrapper.playing .static-img { opacity: 0; }
 
-        .shadow-je { width: 110px; height: 12px; background: rgba(0,0,0,0.15); margin: -10px auto 20px auto; border-radius: 50%; filter: blur(6px); animation: pulse-shadow 2s ease-in-out infinite; }
+        .shadow-je { width: 110px; height: 12px; background: rgba(0,0,0,0.15); margin: -5px auto 20px auto; border-radius: 50%; filter: blur(6px); animation: pulse-shadow 2s ease-in-out infinite; position: relative; z-index: 3; }
         @keyframes pulse-shadow { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.3); opacity: 0.5; } }
 
         .frase-final { font-size: 1.2rem; font-weight: 900; color: var(--navy); text-transform: uppercase; margin-bottom: 25px; line-height: 1.3; }
@@ -205,12 +237,16 @@
             <div class="track"><div class="fill" id="bar"></div></div>
         </section>
 
-        <!-- CONTAINER DO PERSONAGEM DUPLO -->
+        <!-- CONTAINER PERSONAGEM COM GIROFLEX -->
         <div class="character-wrapper" id="charWrapper">
+            <div class="giroflex">
+                <div class="light light-blue"></div>
+                <div class="light light-red"></div>
+            </div>
             <img src="JE-static.png" alt="JE Parado" class="foto-je static-img" onerror="this.src='https://via.placeholder.com/200x200?text=JE+Parado'">
             <img src="JE.gif" alt="JE Dançando" class="foto-je gif-img">
         </div>
-        
+
         <div class="shadow-je"></div>
 
         <div class="btn-group">
@@ -274,7 +310,7 @@
         }
         function startTerminal() { typeTerminal(); }
 
-        // --- AUDIO E CONTROLE DO GIF ---
+        // --- AUDIO & CONTROLE VISUAL ---
         const audio = document.getElementById('musica');
         const btnM = document.getElementById('btnPlay');
         const charWrapper = document.getElementById('charWrapper');
@@ -284,13 +320,13 @@
             if (audio.paused) {
                 audio.play();
                 isMusicPlaying = true;
-                charWrapper.classList.add('playing'); // Ativa o GIF suavemente
+                charWrapper.classList.add('playing'); // Ativa GIF e Giroflex
                 btnM.innerHTML = '<i class="fas fa-volume-xmark"></i> PAUSAR CANÇÃO';
                 terminalEl.textContent = "Decore a canção, aluno!";
             } else {
                 audio.pause();
                 isMusicPlaying = false;
-                charWrapper.classList.remove('playing'); // Volta para imagem estática suavemente
+                charWrapper.classList.remove('playing'); // Volta ao estado estático
                 btnM.innerHTML = '<i class="fas fa-volume-high"></i> CANÇÃO DO CR';
                 charIdx = 0; typeTerminal(); 
             }
