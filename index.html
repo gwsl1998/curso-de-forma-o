@@ -38,35 +38,10 @@
             overflow-x: hidden;
         }
 
-        /* --- EFEITO RADAR (SCANLINE) --- */
-        .radar-sweep {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(
-                to bottom,
-                transparent,
-                rgba(0, 123, 255, 0.05) 50%,
-                rgba(0, 255, 255, 0.15) 95%,
-                rgba(0, 255, 255, 0.4) 100%
-            );
-            z-index: 9999;
-            pointer-events: none;
-            animation: radar-move 4s linear infinite;
-            opacity: 0.5;
-        }
-
-        @keyframes radar-move {
-            0% { transform: translateY(-100px); }
-            100% { transform: translateY(110vh); }
-        }
-
         /* --- TERMINAL TÁTICO --- */
         .terminal-container {
             background: #050a0f;
-            color: #00ff41; /* Verde Matrix/Terminal */
+            color: #00ff41; 
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.75rem;
             padding: 12px;
@@ -161,6 +136,19 @@
             overflow: hidden;
             z-index: 10;
         }
+
+        /* --- CANTONEIRAS DE MIRA (VIEWFINDER) --- */
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 45, 91, 0.3);
+            pointer-events: none;
+        }
+        .top-l { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .top-r { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+        .bot-l { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+        .bot-r { bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
         .main-container::before {
             content: "";
@@ -306,12 +294,11 @@
             .frase-final { font-size: 1.1rem; }
             .btn-group { flex-direction: column; }
             .btn { width: 100%; justify-content: center; }
+            .corner { display: none; } /* Esconde as cantoneiras em telas pequenas para não poluir */
         }
     </style>
 </head>
 <body>
-
-    <div class="radar-sweep"></div>
 
     <div class="modal-overlay" id="modalAlerta">
         <div class="modal-box">
@@ -325,6 +312,12 @@
     </audio>
 
     <div class="main-container">
+        <!-- CANTONEIRAS DE MIRA -->
+        <div class="corner top-l"></div>
+        <div class="corner top-r"></div>
+        <div class="corner bot-l"></div>
+        <div class="corner bot-r"></div>
+
         <header>
             <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
             <h2 class="subtitulo">Faltam apenas</h2>
@@ -369,7 +362,6 @@
             </button>
         </div>
 
-        <!-- CONSOLE TERMINAL TÁTICO -->
         <div class="terminal-container">
             <span class="terminal-prefix">></span>
             <span id="terminal-text"></span>
@@ -382,7 +374,7 @@
             if (!localStorage.getItem('alertaPcrrExibido')) {
                 document.getElementById('modalAlerta').style.display = 'flex';
             }
-            startTerminal(); // Inicia o efeito do terminal
+            startTerminal();
         };
 
         function fecharAlerta() {
@@ -390,7 +382,6 @@
             localStorage.setItem('alertaPcrrExibido', 'true');
         }
 
-        // --- LÓGICA DO TERMINAL TÁTICO ---
         const terminalStrings = [
             "[SISTEMA]: Analisando tempo restante...",
             "[UNIDADE]: Aluno Bisonho em prontidão...",
