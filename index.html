@@ -6,7 +6,8 @@
     <meta name="color-scheme" content="dark">
     <title>Cadastro reserva PCRR - Contagem Regressiva </title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <!-- Importação das Fontes: Montserrat e Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -18,7 +19,7 @@
             --glass: rgba(255, 255, 255, 0.95);
         }
 
-        /* --- ESTILOS DO SPLASH SCREEN --- */
+        /* --- TELA DE SPLASH --- */
         #splash-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -47,7 +48,19 @@
 
         .hidden-splash { opacity: 0; visibility: hidden; }
 
-        /* --- RESTANTE DO CÓDIGO --- */
+        /* --- ANIMAÇÃO DE RESPIRAÇÃO (GLOW) --- */
+        @keyframes breathing-glow {
+            0% { box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0px rgba(184, 134, 11, 0); }
+            50% { box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 25px rgba(184, 134, 11, 0.6); }
+            100% { box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0px rgba(184, 134, 11, 0); }
+        }
+
+        .music-active {
+            animation: breathing-glow 3s ease-in-out infinite !important;
+            border: 1px solid var(--gold) !important;
+        }
+
+        /* --- ESTILOS GERAIS --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -62,54 +75,13 @@
             padding: 20px; color: #333; overflow-x: hidden;
         }
 
-        .terminal-container {
-            background: #050a0f; color: #00ff41; 
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.75rem; padding: 12px; border-radius: 10px;
-            margin-top: 20px; text-align: left; min-height: 45px;
-            border: 1px solid #1a2a3a; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            display: flex; align-items: center;
-        }
-
-        .terminal-prefix { color: #888; margin-right: 5px; }
-
-        .cursor {
-            display: inline-block; width: 8px; height: 15px;
-            background: #00ff41; margin-left: 5px;
-            animation: blink 0.8s infinite; vertical-align: middle;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); display: none; 
-            justify-content: center; align-items: center;
-            z-index: 10000; backdrop-filter: blur(8px);
-        }
-
-        .modal-box {
-            background: white; padding: 40px 30px; border-radius: 25px;
-            text-align: center; max-width: 400px; width: 90%;
-            border-top: 10px solid var(--navy);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .btn-modal {
-            background: var(--navy); color: white; padding: 12px 30px;
-            border-radius: 50px; border: none; font-weight: 800;
-            cursor: pointer; text-transform: uppercase; transition: 0.3s;
-        }
-
         .main-container {
             background: var(--glass); width: 100%; max-width: 650px;
             padding: 40px 30px; border-radius: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.2);
             text-align: center; position: relative; overflow: hidden; z-index: 10;
+            transition: all 0.5s ease;
         }
 
         .main-container::before {
@@ -131,10 +103,7 @@
 
         .progress-container { margin-bottom: 25px; background: #fff; padding: 20px; border-radius: 20px; }
         .track { width: 100%; height: 14px; background: #e9ecef; border-radius: 10px; overflow: hidden; position: relative; }
-        .fill { height: 100%; width: 0%; background: var(--navy); position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1), background 2s ease; box-shadow: 0 0 15px rgba(0, 45, 91, 0.4); }
-        .fill::after { content: ""; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: sweep 3s infinite; }
-
-        @keyframes sweep { 0% { left: -100%; } 100% { left: 150%; } }
+        .fill { height: 100%; width: 0%; background: var(--navy); position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px rgba(0, 45, 91, 0.4); }
 
         .foto-je { height: 220px; width: auto; max-width: 100%; display: block; margin: 0 auto; position: relative; z-index: 2; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
         .shadow-je { width: 120px; height: 12px; background: rgba(0,0,0,0.15); margin: -10px auto 20px auto; border-radius: 50%; filter: blur(6px); animation: pulse-shadow 2s ease-in-out infinite; }
@@ -143,17 +112,58 @@
 
         .frase-final { font-size: 1.4rem; font-weight: 900; color: var(--navy); text-transform: uppercase; margin-bottom: 20px; line-height: 1.2; }
 
-        .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .btn { padding: 15px 25px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s; text-transform: uppercase; border: none; }
-        .btn-audio { background: white; color: var(--navy); border: 2px solid var(--navy); }
+        /* --- BOTÃO COM FONTE ORBITRON --- */
+        .btn-audio { 
+            background: white; 
+            color: var(--navy); 
+            border: 2px solid var(--navy);
+            font-family: 'Orbitron', sans-serif; /* FONTE ORBITRON */
+            letter-spacing: 1px;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
         .btn-audio:hover { background: var(--navy); color: white; }
+
+        .terminal-container {
+            background: #050a0f; color: #00ff41; 
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem; padding: 12px; border-radius: 10px;
+            margin-top: 20px; text-align: left; min-height: 45px;
+            border: 1px solid #1a2a3a; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            display: flex; align-items: center;
+        }
+
+        .cursor { display: inline-block; width: 8px; height: 15px; background: #00ff41; margin-left: 5px; animation: blink 0.8s infinite; vertical-align: middle; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9); display: none; 
+            justify-content: center; align-items: center;
+            z-index: 10000; backdrop-filter: blur(8px);
+        }
+
+        .modal-box {
+            background: white; padding: 40px 30px; border-radius: 25px;
+            text-align: center; max-width: 400px; width: 90%;
+            border-top: 10px solid var(--navy);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
         @media (max-width: 600px) {
             .timer-grid { grid-template-columns: repeat(2, 1fr); }
             .foto-je { height: 160px; }
             .frase-final { font-size: 1.1rem; }
-            .btn-group { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
+            .btn-audio { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -161,19 +171,19 @@
 
     <div id="splash-screen">
         <img src="brasao_pcrr.png" alt="Carregando..." class="splash-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
-        <div class="splash-text">Carregando Sistema...</div>
+        <div class="splash-text">Sincronizando Sistema...</div>
     </div>
 
     <div class="modal-overlay" id="modalAlerta">
         <div class="modal-box">
             <h2>DECORE A CANÇÃO, ALUNO!</h2>
-            <button class="btn-modal" onclick="fecharAlerta(); vibrar();">ENTENDIDO!</button>
+            <button onclick="document.getElementById('modalAlerta').style.display='none'; localStorage.setItem('alertaPcrrExibido','true'); vibrar();" style="background:var(--navy); color:white; padding:12px 30px; border-radius:50px; border:none; font-weight:800; cursor:pointer; text-transform:uppercase;">ENTENDIDO!</button>
         </div>
     </div>
 
     <audio id="musica" loop><source src="musica.mp3" type="audio/mpeg"></audio>
 
-    <div class="main-container">
+    <div class="main-container" id="mainCard">
         <header>
             <img src="brasao_pcrr.png" alt="Brasão PC-RR" class="brasao" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
             <h2 class="subtitulo">Faltam apenas</h2>
@@ -200,11 +210,11 @@
         <div class="shadow-je"></div>
 
         <div class="btn-group">
-            <button class="btn btn-audio" id="btnPlay"><i class="fas fa-play"></i> Canção do CR</button>
+            <button class="btn-audio" id="btnPlay"><i class="fas fa-volume-high"></i> CANÇÃO DO CR</button>
         </div>
 
         <div class="terminal-container">
-            <span class="terminal-prefix">></span><span id="terminal-text"></span><span class="cursor"></span>
+            <span style="color:#888; margin-right:5px;">></span><span id="terminal-text"></span><span class="cursor"></span>
         </div>
     </div>
 
@@ -221,30 +231,18 @@
             }, 2500);
         };
 
-        function fecharAlerta() {
-            document.getElementById('modalAlerta').style.display = 'none';
-            localStorage.setItem('alertaPcrrExibido', 'true');
-        }
-
-        // --- LÓGICA DO TERMINAL COM FRASE DO DIA ---
         const frasesMotivacionais = [
             "A vitória ama a preparação.",
             "Onde o corpo cansa, a mente descansa.",
             "O distintivo não se compra, se conquista.",
             "Padrão e disciplina sempre.",
-            "Treine hoje para não sangrar amanhã.",
-            "A persistência é o caminho do êxito.",
-            "Mantenha o foco, a nomeação está próxima.",
-            "Vigie seus hábitos, eles moldam seu destino.",
-            "Não pare até se orgulhar de você.",
-            "A disciplina é a alma de um exército."
+            "Treine hoje para não sangrar amanhã."
         ];
 
-        // Escolhe a frase baseada no dia do ano (muda a cada 24h)
         const diaDoAno = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
         const fraseDoDia = frasesMotivacionais[diaDoAno % frasesMotivacionais.length];
 
-        const terminalStrings = [
+        let terminalStrings = [
             "[UNIDADE]: Aluno bisonho em preparação...",
             "[COMANDO]: Prepare a carcaça, aluno!",
             "[MISSAO]: " + fraseDoDia
@@ -276,58 +274,57 @@
 
         function startTerminal() { typeTerminal(); }
 
-        // --- ENGINE DO TIMER ---
         const DATA_OBJETIVO = new Date(2026, 8, 8, 0, 0, 0).getTime();
         const DATA_INICIAL = new Date(2026, 2, 1, 0, 0, 0).getTime(); 
 
         const audio = document.getElementById('musica');
         const btnM = document.getElementById('btnPlay');
+        const mainCard = document.getElementById('mainCard');
 
         btnM.addEventListener('click', () => {
             vibrar();
             if (audio.paused) {
-                audio.play().catch(e => alert("Clique na tela primeiro!"));
-                btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar canção';
-                btnM.style.background = "#002D5B"; btnM.style.color = "white";
+                audio.play();
+                btnM.innerHTML = '<i class="fas fa-volume-xmark"></i> PAUSAR CANÇÃO';
+                btnM.style.background = "var(--navy)"; btnM.style.color = "white";
+                
+                // Ativa efeito de respiração no card
+                mainCard.classList.add('music-active');
+                
+                // Adiciona mensagem extra no terminal
+                if (!terminalStrings.includes("[AUDIO]: Canção do CR - Reproduzindo...")) {
+                    terminalStrings.push("[AUDIO]: Canção do CR - Reproduzindo...");
+                }
             } else {
                 audio.pause();
-                btnM.innerHTML = '<i class="fas fa-play"></i> Canção do CR';
-                btnM.style.background = "white"; btnM.style.color = "#002D5B";
+                btnM.innerHTML = '<i class="fas fa-volume-high"></i> CANÇÃO DO CR';
+                btnM.style.background = "white"; btnM.style.color = "var(--navy)";
+                
+                // Remove efeito de respiração
+                mainCard.classList.remove('music-active');
+                
+                // Remove mensagem do terminal
+                terminalStrings = terminalStrings.filter(s => !s.includes("[AUDIO]"));
             }
         });
 
         function engine() {
             const agora = new Date().getTime();
             const diff = DATA_OBJETIVO - agora;
-
-            if (diff <= 0) {
-                document.querySelector('.main-container').innerHTML = `<h1>CHEGOU A HORA! 👮‍♂️</h1>`;
-                document.title = "CHEGOU A HORA! 👮‍♂️";
-                return;
-            }
+            if (diff <= 0) { document.querySelector('.main-container').innerHTML = `<h1>CHEGOU A HORA! 👮‍♂️</h1>`; return; }
 
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
             document.getElementById('d').innerText = d.toString().padStart(2, '0');
             document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
             document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
             document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
-
             document.title = d + " Dias - PCRR";
 
             const total = DATA_OBJETIVO - DATA_INICIAL;
             const decorrido = agora - DATA_INICIAL;
             let perc = Math.min(Math.max((decorrido / total) * 100, 0), 100);
-
-            const bar = document.getElementById('bar');
-            bar.style.width = perc.toFixed(2) + "%";
+            document.getElementById('bar').style.width = perc.toFixed(2) + "%";
             document.getElementById('percent-text').innerText = Math.floor(perc) + "%";
-
-            if(perc > 80) {
-                bar.style.background = "linear-gradient(90deg, #B8860B, #FFD700)";
-                bar.style.boxShadow = "0 0 20px rgba(184, 134, 11, 0.6)";
-            } else if (perc > 50) {
-                bar.style.background = "linear-gradient(90deg, #002D5B, #B8860B)";
-            }
         }
 
         setInterval(engine, 1000);
