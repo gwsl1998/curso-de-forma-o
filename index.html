@@ -115,7 +115,30 @@
         .track { width: 100%; height: 14px; background: #e9ecef; border-radius: 10px; overflow: hidden; position: relative; }
         .fill { height: 100%; width: 0%; background: var(--navy); transition: width 1s ease-in-out; }
 
-        .foto-je { height: 200px; width: auto; display: block; margin: 0 auto; position: relative; z-index: 2; object-fit: contain; }
+        /* --- ESTILIZAÇÃO DO PERSONAGEM (GIF/ESTÁTICO) --- */
+        .character-wrapper {
+            position: relative;
+            height: 200px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 0px;
+        }
+        .foto-je { 
+            height: 200px; 
+            width: auto; 
+            position: absolute; 
+            z-index: 2; 
+            object-fit: contain; 
+            transition: opacity 0.5s ease-in-out; /* Transição suave de meio segundo */
+        }
+        .gif-img { opacity: 0; } /* GIF começa invisível */
+        .static-img { opacity: 1; } /* Imagem estática começa visível */
+
+        /* Quando a classe 'playing' for adicionada ao container */
+        .character-wrapper.playing .gif-img { opacity: 1; }
+        .character-wrapper.playing .static-img { opacity: 0; }
+
         .shadow-je { width: 110px; height: 12px; background: rgba(0,0,0,0.15); margin: -10px auto 20px auto; border-radius: 50%; filter: blur(6px); animation: pulse-shadow 2s ease-in-out infinite; }
         @keyframes pulse-shadow { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.3); opacity: 0.5; } }
 
@@ -136,7 +159,7 @@
         @media (max-width: 600px) {
             .timer-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .number { font-size: 1.8rem; }
-            .foto-je { height: 160px; }
+            .character-wrapper, .foto-je { height: 160px; }
             .frase-final { font-size: 1.1rem; }
         }
     </style>
@@ -146,7 +169,6 @@
     <!-- TELA DE SPLASH -->
     <div id="splash-screen">
         <img src="brasao_pcrr.png" alt="PCRR" class="splash-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
-        <!-- FRASE FIXA SOLICITADA -->
         <div class="splash-text">Paciência Aluno...</div>
     </div>
 
@@ -183,7 +205,12 @@
             <div class="track"><div class="fill" id="bar"></div></div>
         </section>
 
-        <img src="JE.gif" alt="JE" class="foto-je">
+        <!-- CONTAINER DO PERSONAGEM DUPLO -->
+        <div class="character-wrapper" id="charWrapper">
+            <img src="JE-static.png" alt="JE Parado" class="foto-je static-img" onerror="this.src='https://via.placeholder.com/200x200?text=JE+Parado'">
+            <img src="JE.gif" alt="JE Dançando" class="foto-je gif-img">
+        </div>
+        
         <div class="shadow-je"></div>
 
         <div class="btn-group">
@@ -247,20 +274,23 @@
         }
         function startTerminal() { typeTerminal(); }
 
-        // --- AUDIO ---
+        // --- AUDIO E CONTROLE DO GIF ---
         const audio = document.getElementById('musica');
         const btnM = document.getElementById('btnPlay');
+        const charWrapper = document.getElementById('charWrapper');
 
         btnM.addEventListener('click', () => {
             vibrar();
             if (audio.paused) {
                 audio.play();
                 isMusicPlaying = true;
+                charWrapper.classList.add('playing'); // Ativa o GIF suavemente
                 btnM.innerHTML = '<i class="fas fa-volume-xmark"></i> PAUSAR CANÇÃO';
                 terminalEl.textContent = "Decore a canção, aluno!";
             } else {
                 audio.pause();
                 isMusicPlaying = false;
+                charWrapper.classList.remove('playing'); // Volta para imagem estática suavemente
                 btnM.innerHTML = '<i class="fas fa-volume-high"></i> CANÇÃO DO CR';
                 charIdx = 0; typeTerminal(); 
             }
