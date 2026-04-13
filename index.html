@@ -18,6 +18,53 @@
             --glass: rgba(255, 255, 255, 0.95);
         }
 
+        /* --- ESTILOS DO SPLASH SCREEN --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-base);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999; /* Fica acima de tudo */
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .splash-logo {
+            width: 120px;
+            margin-bottom: 20px;
+            /* Animação de Batimento Cardíaco */
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .splash-text {
+            color: white;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0.7;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(184, 134, 11, 0)); }
+            15% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.5)); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.5)); }
+            100% { transform: scale(1); }
+        }
+
+        /* Classe para esconder o splash */
+        .hidden-splash {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- RESTANTE DO SEU CÓDIGO --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -36,7 +83,6 @@
             overflow-x: hidden;
         }
 
-        /* --- TERMINAL TÁTICO --- */
         .terminal-container {
             background: #050a0f;
             color: #00ff41; 
@@ -70,7 +116,6 @@
             50% { opacity: 0; }
         }
 
-        /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -111,7 +156,6 @@
             transition: 0.3s;
         }
 
-        /* --- CONTAINER PRINCIPAL --- */
         .main-container {
             background: var(--glass);
             width: 100%;
@@ -192,7 +236,6 @@
             display: block;
         }
 
-        /* --- BARRA DE PROGRESSO ENERGIZADA --- */
         .progress-container {
             margin-bottom: 25px;
             background: #fff;
@@ -218,7 +261,6 @@
             box-shadow: 0 0 15px rgba(0, 45, 91, 0.4);
         }
 
-        /* Efeito de brilho que percorre a barra */
         .fill::after {
             content: "";
             position: absolute;
@@ -234,7 +276,6 @@
             100% { left: 150%; }
         }
 
-        /* --- GIF E SOMBRA DINÂMICA --- */
         .foto-je {
             height: 220px; 
             width: auto;
@@ -307,10 +348,15 @@
 </head>
 <body>
 
+    <!-- TELA DE SPLASH (ADICIONADA) -->
+    <div id="splash-screen">
+        <img src="brasao_pcrr.png" alt="Carregando..." class="splash-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1022/1022484.png'">
+        <div class="splash-text">Carregando Sistema...</div>
+    </div>
+
     <div class="modal-overlay" id="modalAlerta">
         <div class="modal-box">
             <h2>DECORE A CANÇÃO, ALUNO!</h2>
-            <!-- Feedback tátil adicionado no clique -->
             <button class="btn-modal" onclick="fecharAlerta(); vibrar();">ENTENDIDO!</button>
         </div>
     </div>
@@ -373,18 +419,24 @@
     </div>
 
     <script>
-        // Função de vibração (Haptic Feedback)
         function vibrar() {
             if (navigator.vibrate) {
-                navigator.vibrate(40); // Vibra por 40 milissegundos
+                navigator.vibrate(40);
             }
         }
 
         window.onload = function() {
-            if (!localStorage.getItem('alertaPcrrExibido')) {
-                document.getElementById('modalAlerta').style.display = 'flex';
-            }
-            startTerminal();
+            // Lógica para esconder o Splash Screen após carregar
+            setTimeout(function() {
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('hidden-splash');
+                
+                // Modal de Alerta original
+                if (!localStorage.getItem('alertaPcrrExibido')) {
+                    document.getElementById('modalAlerta').style.display = 'flex';
+                }
+                startTerminal();
+            }, 2500); // Exibe por 2.5 segundos para dar o efeito de "App"
         };
 
         function fecharAlerta() {
@@ -433,7 +485,7 @@
         const btnM = document.getElementById('btnPlay');
 
         btnM.addEventListener('click', () => {
-            vibrar(); // Adicionado vibração ao clicar no botão de áudio
+            vibrar();
             if (audio.paused) {
                 audio.play().catch(e => alert("Clique na tela primeiro!"));
                 btnM.innerHTML = '<i class="fas fa-pause"></i> Pausar canção';
@@ -456,17 +508,11 @@
             }
 
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diff % (1000 * 60)) / 1000);
-
             document.getElementById('d').innerText = dias.toString().padStart(2, '0');
-            document.getElementById('h').innerText = horas.toString().padStart(2, '0');
-            document.getElementById('m').innerText = minutos.toString().padStart(2, '0');
-            document.getElementById('s').innerText = segundos.toString().padStart(2, '0');
+            document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
 
-            // --- TÍTULO DINÂMICO ---
-            // Atualiza o título da aba do navegador com os dias restantes
             document.title = dias + " Dias - PCRR";
 
             const total = DATA_OBJETIVO - DATA_INICIAL;
