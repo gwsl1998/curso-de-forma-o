@@ -53,7 +53,7 @@
                 rgba(0, 255, 255, 0.4) 100%
             );
             z-index: 9999;
-            pointer-events: none; /* Não interfere nos cliques */
+            pointer-events: none;
             animation: radar-move 4s linear infinite;
             opacity: 0.5;
         }
@@ -61,6 +61,40 @@
         @keyframes radar-move {
             0% { transform: translateY(-100px); }
             100% { transform: translateY(110vh); }
+        }
+
+        /* --- TERMINAL TÁTICO --- */
+        .terminal-container {
+            background: #050a0f;
+            color: #00ff41; /* Verde Matrix/Terminal */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            min-height: 45px;
+            border: 1px solid #1a2a3a;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-prefix { color: #888; margin-right: 5px; }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: #00ff41;
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         /* --- ESTILO DO ALERTA PERSONALIZADO --- */
@@ -179,12 +213,6 @@
             animation: pulse 1s infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); }
-        }
-
         .label {
             font-size: 0.65rem;
             text-transform: uppercase;
@@ -283,10 +311,8 @@
 </head>
 <body>
 
-    <!-- EFEITO RADAR -->
     <div class="radar-sweep"></div>
 
-    <!-- MODAL DE ALERTA -->
     <div class="modal-overlay" id="modalAlerta">
         <div class="modal-box">
             <h2>DECORE A CANÇÃO, ALUNO!</h2>
@@ -342,6 +368,13 @@
                 <i class="fas fa-play"></i> Canção do CR
             </button>
         </div>
+
+        <!-- CONSOLE TERMINAL TÁTICO -->
+        <div class="terminal-container">
+            <span class="terminal-prefix">></span>
+            <span id="terminal-text"></span>
+            <span class="cursor"></span>
+        </div>
     </div>
 
     <script>
@@ -349,11 +382,50 @@
             if (!localStorage.getItem('alertaPcrrExibido')) {
                 document.getElementById('modalAlerta').style.display = 'flex';
             }
+            startTerminal(); // Inicia o efeito do terminal
         };
 
         function fecharAlerta() {
             document.getElementById('modalAlerta').style.display = 'none';
             localStorage.setItem('alertaPcrrExibido', 'true');
+        }
+
+        // --- LÓGICA DO TERMINAL TÁTICO ---
+        const terminalStrings = [
+            "[SISTEMA]: Analisando tempo restante...",
+            "[UNIDADE]: Aluno Bisonho em prontidão...",
+            "[INFO]: Curso de Formação PCRR - Carregando...",
+            "[STATUS]: Vigilância constante.",
+            "[LOG]: Sincronizando com o Diário Oficial..."
+        ];
+
+        let stringIdx = 0;
+        let charIdx = 0;
+        const terminalEl = document.getElementById('terminal-text');
+
+        function typeTerminal() {
+            if (charIdx < terminalStrings[stringIdx].length) {
+                terminalEl.textContent += terminalStrings[stringIdx].charAt(charIdx);
+                charIdx++;
+                setTimeout(typeTerminal, 50);
+            } else {
+                setTimeout(eraseTerminal, 3000);
+            }
+        }
+
+        function eraseTerminal() {
+            if (charIdx > 0) {
+                terminalEl.textContent = terminalStrings[stringIdx].substring(0, charIdx - 1);
+                charIdx--;
+                setTimeout(eraseTerminal, 20);
+            } else {
+                stringIdx = (stringIdx + 1) % terminalStrings.length;
+                setTimeout(typeTerminal, 500);
+            }
+        }
+
+        function startTerminal() {
+            typeTerminal();
         }
 
         const DATA_OBJETIVO = new Date(2026, 8, 8, 0, 0, 0).getTime();
